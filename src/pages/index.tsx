@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { postToken } from 'api/token';
 import api from 'api/api';
 import { getSearch } from 'api/search';
+import axios from 'axios';
 
 function Home() {
   const router = useRouter();
@@ -82,11 +83,12 @@ export const getServerSideProps = async (context: NextPageContext) => {
 
   await postToken().then((response) => {
     const data = response.data;
-    console.log(data);
-    setCookie('access_token', data['access_token'], {
+    // axios.defaults.headers.common['Authorization'] = `Bearer ${data.acccess_token}`;
+
+    setCookie('access_token', data.access_token, {
       req,
       res,
-      maxAge: data['expires_in'],
+      maxAge: data.expires_in,
     });
   });
 
@@ -96,3 +98,4 @@ export const getServerSideProps = async (context: NextPageContext) => {
 };
 
 export default Home;
+

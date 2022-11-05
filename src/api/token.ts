@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-export const postToken = () =>
-  axios({
+export const postToken = () => {
+  return axios({
     method: 'post',
     url: 'https://accounts.spotify.com/api/token',
     headers: {
@@ -15,5 +15,5 @@ export const postToken = () =>
     data: {
       grant_type: 'client_credentials',
     },
-    withCredentials: true,
   });
+};

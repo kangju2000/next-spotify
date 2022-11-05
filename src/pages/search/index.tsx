@@ -25,20 +25,10 @@ const Search = ({ data }) => {
 };
 
 export const getServerSideProps = async ({ req }: NextPageContext) => {
-  // const res = await api({
-  //   method: 'get',
-  //   url: `/v1/search?q=${query.q}&type=artist`,
-  // });
-  // const data = res.data;
-  // console.log(data);
-
-  // const cookie = req ? req.headers.cookie : '';
-  // axios.defaults.headers.Cookie = req && cookie ? cookie : '';
   const res = await getSearch({ q: '아이유', type: 'artist' });
 
   return {
     props: { data: res.data },
-    // props: { searchData: data },
   };
 };
 
