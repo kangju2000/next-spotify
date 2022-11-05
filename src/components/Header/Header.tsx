@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import Sidebar from '../Sidebar/Sidebar';
+import Sidebar from 'components/Sidebar/Sidebar';
 import { useState } from 'react';
 
 const Header = () => {

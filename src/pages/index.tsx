@@ -1,14 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { setCookie } from 'cookies-next';
+import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { postToken } from 'api/token';
+import api from 'api/api';
+import { getSearch } from 'api/search';
 
-export default function Home() {
+function Home() {
   const router = useRouter();
   const [value, setValue] = useState<string>('');
 
   const onHandleSubmit = () => {
-    router.push(`/search?query=${value}`);
+    router.push(`/search?q=${value}`);
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
@@ -18,6 +23,14 @@ export default function Home() {
     if (e.key === 'Enter') {
       onHandleSubmit();
     }
+  };
+
+  const handleClick = async () => {
+    const res = await api({
+      method: 'get',
+      url: `/v1/search?q=${value}&type=artist`,
+    });
+    console.log(res.data);
   };
 
   return (
@@ -59,6 +72,27 @@ export default function Home() {
           onKeyDown={handleKeyPress}
         />
       </div>
+      <button onClick={handleClick}>클릭!</button>
     </div>
   );
 }
+
+export const getServerSideProps = async (context: NextPageContext) => {
+  const { req, res } = context;
+
+  await postToken().then((response) => {
+    const data = response.data;
+    console.log(data);
+    setCookie('access_token', data['access_token'], {
+      req,
+      res,
+      maxAge: data['expires_in'],
+    });
+  });
+
+  return {
+    props: {},
+  };
+};
+
+export default Home;
