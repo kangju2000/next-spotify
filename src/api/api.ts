@@ -4,9 +4,7 @@ import { getCookie } from 'cookies-next';
 
 const api = axios.create({
   baseURL: BASE_URL,
-  // withCredentials: true,
 });
-// axios.defaults.withCredentials = true;
 
 api.interceptors.request.use((req) => {
   const accessToken = getCookie('access_token');
@@ -14,7 +12,6 @@ api.interceptors.request.use((req) => {
 
   req.headers = {
     authorization: `Bearer ${accessToken}`,
-    'Access-Control-Allow-Origin': '*',
   };
 
   return req;
