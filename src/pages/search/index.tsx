@@ -1,8 +1,6 @@
-import { NextPageContext } from 'next';
-import { album, artist, SearchArtists, SearchTracks } from 'types/spotify';
 import api from 'api/api';
 import axios from 'axios';
-import { getSearch } from 'api/search';
+import { contextType } from 'types/type';
 
 const Search = ({ data }) => {
   const handleClick = async () => {
@@ -24,8 +22,13 @@ const Search = ({ data }) => {
   );
 };
 
-export const getServerSideProps = async ({ req }: NextPageContext) => {
-  const res = await getSearch({ q: '아이유', type: 'artist' });
+export const getServerSideProps = async (context: contextType) => {
+  const { q, type } = context.query;
+
+  const res = await axios({
+    method: 'get',
+    url: `https://api.spotify.com/v1/search?q=${q}&type=${type || 'track,artist'}&limit=3`,
+  });
 
   return {
     props: { data: res.data },

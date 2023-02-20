@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import Sidebar from 'components/Sidebar/Sidebar';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import Sidebar from 'components/Sidebar/Sidebar';
 import { useState } from 'react';
 
 const Header = () => {

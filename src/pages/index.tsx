@@ -1,38 +1,26 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { setCookie } from 'cookies-next';
-import { NextPageContext } from 'next';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
 import { postToken } from 'api/token';
-import api from 'api/api';
-import { getSearch } from 'api/search';
-import axios from 'axios';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
+import { setToken } from 'utils/TokenManager';
 
-function Home() {
+function Home({ token }: { token: string }) {
   const router = useRouter();
-  const [value, setValue] = useState<string>('');
+  const [value, setValue] = useState('');
 
-  const onHandleSubmit = () => {
-    router.push(`/search?q=${value}`);
-  };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      onHandleSubmit();
-    }
+  const handleClick = async () => {
+    router.push(`/search?q=${value}`);
   };
 
-  const handleClick = async () => {
-    const res = await api({
-      method: 'get',
-      url: `/v1/search?q=${value}&type=artist`,
-    });
-    console.log(res.data);
-  };
+  useEffect(() => {
+    setToken(token);
+  }, []);
 
   return (
     <div
@@ -70,7 +58,6 @@ function Home() {
             font-size: 18px;
           `}
           onChange={handleChange}
-          onKeyDown={handleKeyPress}
         />
       </div>
       <button onClick={handleClick}>클릭!</button>
@@ -78,24 +65,23 @@ function Home() {
   );
 }
 
-export const getServerSideProps = async (context: NextPageContext) => {
-  const { req, res } = context;
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const token = req.cookies.access_token || null;
+  if (token) {
+    return {
+      props: { token },
+    };
+  }
 
-  await postToken().then((response) => {
-    const data = response.data;
-    // axios.defaults.headers.common['Authorization'] = `Bearer ${data.acccess_token}`;
-
-    setCookie('access_token', data.access_token, {
-      req,
-      res,
-      maxAge: data.expires_in,
-    });
-  });
+  const response = await postToken();
+  const data = response.data;
+  setToken(data.access_token);
 
   return {
-    props: {},
+    props: {
+      token: data.access_token,
+    },
   };
 };
 
 export default Home;
-

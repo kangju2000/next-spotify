@@ -1,9 +1,9 @@
 import 'styles/reset.css';
-import { AppProps } from 'next/app';
 import { ThemeProvider } from '@emotion/react';
-import theme from 'styles/theme';
-import GlobalStyle from 'styles/GlobalStyle';
 import Header from 'components/Header/Header';
+import { AppProps } from 'next/app';
+import GlobalStyle from 'styles/GlobalStyle';
+import theme from 'styles/theme';
 
 function App({ Component, pageProps }: AppProps) {
   return (

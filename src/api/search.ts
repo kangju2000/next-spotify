@@ -1,5 +1,5 @@
-import { getSearchProps } from 'types/spotify';
 import api from 'api/api';
+import { getSearchProps } from 'types/spotify';
 
 export const getSearch = (query: getSearchProps) => {
   return api({
