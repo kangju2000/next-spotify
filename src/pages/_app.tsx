@@ -1,4 +1,3 @@
-import 'styles/reset.css';
 import { ThemeProvider } from '@emotion/react';
 import Header from 'components/Header/Header';
 import { AppProps } from 'next/app';
