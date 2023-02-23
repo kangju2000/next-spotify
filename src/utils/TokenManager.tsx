@@ -1,12 +1,10 @@
-import axios from 'axios';
+import api from 'api/api';
 import { Cookies } from 'react-cookie';
 
 const cookies = new Cookies();
 
 export const setToken = (token: string) => {
-  if (typeof window === 'undefined') {
-    axios.defaults.headers.common['Autorization'] = `Bearer ${token}`;
-  }
+  api.defaults.headers.common['Autorization'] = `Bearer ${token}`;
 
   cookies.set('access_token', token, { path: '/' });
 };

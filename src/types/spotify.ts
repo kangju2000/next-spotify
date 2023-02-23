@@ -39,9 +39,8 @@ export type image = {
   width: number;
 };
 
-export type getSearchProps = {
+export type getSearchQuery = {
   q: string;
-  type: 'artist' | 'track';
 };
 
 export interface SearchArtists {

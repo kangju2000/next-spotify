@@ -1,9 +1,9 @@
 import api from 'api/api';
-import { getSearchProps } from 'types/spotify';
+import { getSearchQuery } from 'types/spotify';
 
-export const getSearch = (query: getSearchProps) => {
+export const getSearch = (query: getSearchQuery) => {
   return api({
     method: 'get',
-    url: `https://api.spotify.com/v1/search?q=${query.q}&type=${query.type}`,
+    url: `https://api.spotify.com/v1/search?q=${query.q}&type=artist,track`,
   });
 };

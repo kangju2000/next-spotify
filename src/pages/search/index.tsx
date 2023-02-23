@@ -1,8 +1,9 @@
 import api from 'api/api';
-import axios from 'axios';
-import { contextType } from 'types/type';
+import { getSearch } from 'api/search';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { getSearchQuery } from 'types/spotify';
 
-const Search = ({ data }) => {
+const Search = ({ data }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const handleClick = async () => {
     const res = await api({
       method: 'get',
@@ -22,16 +23,11 @@ const Search = ({ data }) => {
   );
 };
 
-export const getServerSideProps = async (context: contextType) => {
-  const { q, type } = context.query;
-
-  const res = await axios({
-    method: 'get',
-    url: `https://api.spotify.com/v1/search?q=${q}&type=${type || 'track,artist'}&limit=3`,
-  });
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const response = await getSearch(query as getSearchQuery);
 
   return {
-    props: { data: res.data },
+    props: { data: response.data },
   };
 };
 

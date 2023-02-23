@@ -1,7 +1,7 @@
-import axios from 'axios';
+import api from 'api/api';
 
 export const postToken = () => {
-  return axios({
+  return api({
     method: 'post',
     url: 'https://accounts.spotify.com/api/token',
     headers: {

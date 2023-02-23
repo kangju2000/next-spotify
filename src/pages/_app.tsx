@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@emotion/react';
-import Header from 'components/Header/Header';
+import Layout from 'components/Layout/Layout';
 import { AppProps } from 'next/app';
 import GlobalStyle from 'styles/GlobalStyle';
 import theme from 'styles/theme';
@@ -8,8 +8,9 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Header />
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </ThemeProvider>
   );
 }
