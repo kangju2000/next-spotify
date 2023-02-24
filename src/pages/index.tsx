@@ -1,5 +1,14 @@
+import Categories from 'components/home/Categories/Categories';
+import RecommendPlaylist from 'components/home/RecommendPlaylist/RecommendPlaylist';
+import * as S from './index.styles';
+
 function Home() {
-  return <div></div>;
+  return (
+    <S.Container>
+      <RecommendPlaylist />
+      <Categories />
+    </S.Container>
+  );
 }
 
 // export const getServerSideProps: GetServerSideProps = async ({ req }) => {
