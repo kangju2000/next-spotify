@@ -34,9 +34,9 @@ export type album = {
 };
 
 export type image = {
-  height: number;
   url: string;
   width: number;
+  height: number;
 };
 
 export type getSearchQuery = {

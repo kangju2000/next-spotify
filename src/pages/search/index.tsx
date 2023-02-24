@@ -1,7 +1,7 @@
 import api from 'api/api';
 import { getSearch } from 'api/search';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { getSearchQuery } from 'types/spotify';
+import { getSearchQuery } from '@types/spotify';
 
 const Search = ({ data }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const handleClick = async () => {
