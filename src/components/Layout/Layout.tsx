@@ -10,10 +10,10 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <S.Container>
       <Sidebar />
-      <>
+      <S.Content>
         <Header />
         {children}
-      </>
+      </S.Content>
     </S.Container>
   );
 };

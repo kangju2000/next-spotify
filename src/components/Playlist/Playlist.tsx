@@ -1,18 +1,18 @@
 import * as S from './Playlist.styles';
 
 export interface PlaylistProps {
-  playlist: SpotifyApi.PlaylistBaseObject;
+  playlist: SpotifyApi.PlaylistObjectSimplified;
 }
 
 const Playlist = ({ playlist }: PlaylistProps) => {
   return (
     <S.Container>
-      <S.PLImage src={playlist.images[0].url} />
-      <S.PLInfo>
-        <S.PLName>{playlist.name}</S.PLName>
-        <S.PLDescription>{playlist.description}</S.PLDescription>
-        <S.PLButton>바로가기</S.PLButton>
-      </S.PLInfo>
+      <S.Thumbnail src={playlist.images[0].url} alt="플레이리스트 이미지" />
+      <S.Info>
+        <S.Name>{playlist.name}</S.Name>
+        <S.Description>{playlist.description}</S.Description>
+        <S.Button>바로가기</S.Button>
+      </S.Info>
     </S.Container>
   );
 };

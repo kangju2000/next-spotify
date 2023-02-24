@@ -6,29 +6,29 @@ export const Container = styled.div`
   height: 300px;
   padding: 20px;
   border-radius: 5px;
-  background-color: #181818;
+  background-color: ${({ theme }) => theme.colors.darkgray};
 `;
 
-export const PLImage = styled.img`
+export const Thumbnail = styled.img`
   border-radius: 5px;
 `;
 
-export const PLInfo = styled.div`
+export const Info = styled.div`
   position: relative;
   margin-left: 10px;
 `;
 
-export const PLName = styled.h2`
+export const Name = styled.h2`
   margin-bottom: 10px;
   font-size: 24px;
   font-weight: 700;
 `;
 
-export const PLDescription = styled.p`
+export const Description = styled.p`
   color: ${({ theme }) => theme.colors.lightgray};
 `;
 
-export const PLButton = styled.button`
+export const Button = styled.button`
   position: absolute;
   bottom: 0;
   right: 0;
