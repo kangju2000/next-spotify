@@ -14,5 +14,6 @@ export const getToken = () => {
   if (token) {
     return token;
   }
+
   return null;
 };
