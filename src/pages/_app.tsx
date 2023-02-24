@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@emotion/react';
-import Layout from 'components/Layout/Layout';
+import Layout from 'components/common/Layout/Layout';
 import { AppProps } from 'next/app';
 import GlobalStyle from 'styles/GlobalStyle';
 import theme from 'styles/theme';

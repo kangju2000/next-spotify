@@ -1,5 +1,5 @@
-import Clock from 'components/Clock/Clock';
-import SearchInput from 'components/SearchInput/SearchInput';
+import Clock from 'components/common/Clock/Clock';
+import SearchInput from 'components/common/SearchInput/SearchInput';
 import * as S from './Header.styles';
 
 const Header = () => {
