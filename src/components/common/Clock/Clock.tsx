@@ -6,7 +6,7 @@ const Clock = () => {
 
   useEffect(() => {
     const intervalID = setInterval(() => {
-      setTime(new Date());
+      if (window) setTime(new Date());
     }, 1000);
 
     return () => clearInterval(intervalID);

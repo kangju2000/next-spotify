@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { getRecommendations } from 'api/browse';
 import RecommendTracks from 'components/home/RecommendTracks/RecommendTracks';
+import { useGetRecommendations } from 'hooks/queries/browse';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
 function Home({ tracks }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -12,11 +13,14 @@ function Home({ tracks }: InferGetServerSidePropsType<typeof getServerSideProps>
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const response = await getRecommendations({ seed_genres: 'k-pop', limit: 4 });
+  const { data } = useGetRecommendations({
+    seed_genres: 'k-pop',
+    limit: 4,
+  });
 
   return {
     props: {
-      tracks: response.data.tracks,
+      tracks: data.tracks,
     },
   };
 };
