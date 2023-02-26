@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { BASE_URL } from 'constants/path';
-import { getToken, setToken } from 'utils/TokenManager';
 import { postToken } from './token';
 
 const api = axios.create({
@@ -9,20 +8,6 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (req) => {
-    const accessToken = getToken();
-    console.log(accessToken);
-    if (!accessToken) {
-      postToken().then((res) => {
-        const token = res.data.access_token;
-        console.log(token);
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        setToken(token);
-      });
-    }
-
-    const headers = req.headers || {};
-    headers.authorization = `Bearer ${accessToken}`;
-
     return req;
   },
   (error) => Promise.reject(error)
@@ -30,22 +15,23 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (res) => res,
-  (error) => {
-    const originalRequest = error.config;
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+  async (error) => {
+    const { config, response } = error;
 
-      postToken().then((res) => {
-        const token = res.data.access_token;
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        originalRequest.headers['Authorization'] = `Bearer ${token}`;
+    if (response?.status === 401 && !config._retry) {
+      config._retry = true;
 
-        return api(originalRequest);
-      });
+      const {
+        data: { access_token },
+      } = await postToken();
+
+      api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+      return api(config);
     }
 
     return Promise.reject(error);
-  }
+  },
+  { synchronous: true }
 );
 
 export default api;

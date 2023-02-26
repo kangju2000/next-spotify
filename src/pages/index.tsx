@@ -1,25 +1,22 @@
 import { getRecommendations } from 'api/browse';
-import { postToken } from 'api/token';
-import Categories from 'components/home/Categories/Categories';
-import RecommendTrack from 'components/home/RecommendTrack/RecommendTrack';
+import RecommendTracks from 'components/home/RecommendTracks/RecommendTracks';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import * as S from './index.styles';
 
-function Home({ album }: SpotifyApi.RecommendationTrackObject) {
+function Home({ tracks }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <S.Container>
-      <RecommendTrack album={album} />
-      {/* <Categories categories={categories} /> */}
+      <RecommendTracks tracks={tracks} />
     </S.Container>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const response = await getRecommendations({ seed_genres: 'k-pop', limit: 1 });
+  const response = await getRecommendations({ seed_genres: 'k-pop', limit: 4 });
 
   return {
     props: {
-      playlist: response.data.tracks[0],
+      tracks: response.data.tracks,
     },
   };
 };
