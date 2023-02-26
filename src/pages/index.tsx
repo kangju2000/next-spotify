@@ -1,13 +1,13 @@
+import styled from '@emotion/styled';
 import { getRecommendations } from 'api/browse';
 import RecommendTracks from 'components/home/RecommendTracks/RecommendTracks';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import * as S from './index.styles';
 
 function Home({ tracks }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <S.Container>
+    <Container>
       <RecommendTracks tracks={tracks} />
-    </S.Container>
+    </Container>
   );
 }
 
@@ -20,5 +20,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
     },
   };
 };
+
+export const Container = styled.div`
+  padding: 20px;
+`;
 
 export default Home;
