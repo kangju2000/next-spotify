@@ -1,33 +1,28 @@
-import Categories from 'components/home/Categories/Categories';
-import RecommendPlaylist from 'components/home/RecommendPlaylist/RecommendPlaylist';
-import * as S from './index.styles';
+import styled from '@emotion/styled';
+import { getRecommendations } from 'api/browse';
+import RecommendTracks from 'components/home/RecommendTracks/RecommendTracks';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
-function Home() {
+function Home({ tracks }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <S.Container>
-      <RecommendPlaylist />
-      <Categories />
-    </S.Container>
+    <Container>
+      <RecommendTracks tracks={tracks} />
+    </Container>
   );
 }
 
-// export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-//   const token = req.cookies.access_token || null;
-//   if (token) {
-//     return {
-//       props: { token },
-//     };
-//   }
+export const getServerSideProps: GetServerSideProps = async () => {
+  const response = await getRecommendations({ seed_genres: 'k-pop', limit: 4 });
 
-//   const response = await postToken();
-//   const data = response.data;
-//   setToken(data.access_token);
+  return {
+    props: {
+      tracks: response.data.tracks,
+    },
+  };
+};
 
-//   return {
-//     props: {
-//       token: data.access_token,
-//     },
-//   };
-// };
+export const Container = styled.div`
+  padding: 20px;
+`;
 
 export default Home;

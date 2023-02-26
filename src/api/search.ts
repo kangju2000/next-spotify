@@ -1,9 +1,8 @@
 import api from 'api/api';
-import { getSearchQuery } from '@types/spotify';
 
-export const getSearch = (query: getSearchQuery) => {
+export const getSearch = ({ q }: SpotifyApi.SearchForItemParameterObject) => {
   return api({
     method: 'get',
-    url: `https://api.spotify.com/v1/search?q=${query.q}&type=artist,track`,
+    url: `https://api.spotify.com/v1/search?q=${q}&type=artist,track`,
   });
 };

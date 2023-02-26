@@ -1,9 +1,6 @@
 import api from 'api/api';
-import { getSearch } from 'api/search';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { getSearchQuery } from '@types/spotify';
 
-const Search = ({ data }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Search = () => {
   const handleClick = async () => {
     const res = await api({
       method: 'get',
@@ -11,7 +8,7 @@ const Search = ({ data }: InferGetServerSidePropsType<typeof getServerSideProps>
     });
     console.log(res.data);
   };
-  console.log(data);
+
   return (
     <>
       <button onClick={handleClick}>클릭</button>
@@ -23,12 +20,12 @@ const Search = ({ data }: InferGetServerSidePropsType<typeof getServerSideProps>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const response = await getSearch(query as getSearchQuery);
+// export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+//   const response = await getSearch(query as getSearchQuery);
 
-  return {
-    props: { data: response.data },
-  };
-};
+//   return {
+//     props: { data: response.data },
+//   };
+// };
 
 export default Search;
