@@ -35,25 +35,16 @@ export const getRecommendationsGenres = () => {
   });
 };
 
-export const getRecommendations = ({
-  seed_genres,
-  seed_artists,
-  seed_tracks,
-  limit,
-}: SpotifyApi.RecommendationsOptionsObject) => {
-  const genres = Array.isArray(seed_genres) ? seed_genres.join(',') : seed_genres;
-  const artists = Array.isArray(seed_artists) ? seed_artists.join(',') : seed_artists;
-  const tracks = Array.isArray(seed_tracks) ? seed_tracks.join(',') : seed_tracks;
-  const params = new URLSearchParams();
-
-  if (genres) params.append('seed_genres', genres);
-  if (artists) params.append('seed_artists', artists);
-  if (tracks) params.append('seed_tracks', tracks);
-  if (limit) params.append('limit', limit.toString());
-
-  return api({
+export const getRecommendations = (
+  params: Pick<
+    SpotifyApi.RecommendationsOptionsObject,
+    'seed_genres' | 'seed_artists' | 'seed_tracks' | 'limit'
+  >
+) => {
+  return api<SpotifyApi.RecommendationsFromSeedsResponse>({
     method: 'get',
-    url: `https://api.spotify.com/v1/recommendations?${params.toString()}`,
+    url: 'https://api.spotify.com/v1/recommendations',
+    params,
   });
 };
 

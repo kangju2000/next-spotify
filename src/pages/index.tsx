@@ -5,15 +5,23 @@ import { useGetRecommendations } from 'hooks/queries/browse';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
 function Home({ tracks }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { data: recommendations } = useGetRecommendations(
+    {
+      seed_genres: 'k-pop',
+      limit: 4,
+    },
+    { initialData: tracks }
+  );
+
   return (
     <Container>
-      <RecommendTracks tracks={tracks} />
+      {recommendations?.data?.tracks && <RecommendTracks tracks={recommendations.data.tracks} />}
     </Container>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const { data } = useGetRecommendations({
+  const { data } = await getRecommendations({
     seed_genres: 'k-pop',
     limit: 4,
   });

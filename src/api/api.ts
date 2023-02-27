@@ -1,6 +1,6 @@
+import { postToken } from 'api/token';
 import axios from 'axios';
 import { BASE_URL } from 'constants/path';
-import { postToken } from './token';
 
 const api = axios.create({
   baseURL: BASE_URL,

@@ -7,7 +7,8 @@ import {
   getRecommendations,
   getRecommendationsGenres,
 } from 'api/browse';
-import { useQuery } from 'react-query';
+import type { AxiosError, AxiosResponse } from 'axios';
+import { useQuery, UseQueryOptions } from 'react-query';
 
 export const useGetNewReleases = () => {
   const { data, error, isLoading } = useQuery('newReleases', getNewReleases);
@@ -41,18 +42,18 @@ export const useGetRecommendationsGenres = () => {
   return { data, error, isLoading };
 };
 
-export const useGetRecommendations = ({
-  seed_genres,
-  seed_artists,
-  seed_tracks,
-  limit,
-}: SpotifyApi.RecommendationsOptionsObject) => {
-  const { data, error, isLoading } = useQuery(
+export const useGetRecommendations = (
+  { seed_genres, seed_artists, seed_tracks, limit }: SpotifyApi.RecommendationsOptionsObject,
+  options?: UseQueryOptions<AxiosResponse<SpotifyApi.RecommendationsFromSeedsResponse>, AxiosError>
+) => {
+  return useQuery<AxiosResponse<SpotifyApi.RecommendationsFromSeedsResponse>, AxiosError>(
     ['recommendations', seed_genres, seed_artists, seed_tracks, limit],
-    () => getRecommendations({ seed_genres, seed_artists, seed_tracks, limit })
+    () => getRecommendations({ seed_genres, seed_artists, seed_tracks, limit }),
+    {
+      enabled: !!seed_genres || !!seed_artists || !!seed_tracks,
+      ...options,
+    }
   );
-
-  return { data, error, isLoading };
 };
 
 export const useGetFeaturedPlaylists = () => {
