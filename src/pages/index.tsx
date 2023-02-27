@@ -1,11 +1,13 @@
 import styled from '@emotion/styled';
-import { getRecommendations } from 'api/browse';
+import { getCategories, getRecommendations } from 'api/browse';
+import Categories from 'components/home/Categories/Categories';
 import RecommendTracks from 'components/home/RecommendTracks/RecommendTracks';
-import { useGetRecommendations } from 'hooks/queries/browse';
+import { useGetCategories, useGetRecommendations } from 'hooks/queries/browse';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
-function Home({ tracks }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { data: recommendations } = useGetRecommendations(
+function Home({ tracks, categories }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  console.log(tracks, categories);
+  const { data: recommendationsData } = useGetRecommendations(
     {
       seed_genres: 'k-pop',
       limit: 4,
@@ -13,22 +15,32 @@ function Home({ tracks }: InferGetServerSidePropsType<typeof getServerSideProps>
     { initialData: tracks }
   );
 
+  const { data: categoriesData } = useGetCategories({ initialData: categories });
+
   return (
     <Container>
-      {recommendations?.data?.tracks && <RecommendTracks tracks={recommendations.data.tracks} />}
+      {recommendationsData?.data?.tracks && (
+        <RecommendTracks tracks={recommendationsData.data.tracks} />
+      )}
+      {categoriesData?.data?.categories && (
+        <Categories categories={categoriesData.data.categories} />
+      )}
     </Container>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const { data } = await getRecommendations({
+  const { data: recommendations } = await getRecommendations({
     seed_genres: 'k-pop',
     limit: 4,
   });
 
+  const { data: categories } = await getCategories();
+
   return {
     props: {
-      tracks: data.tracks,
+      tracks: recommendations.tracks,
+      categories: categories.categories,
     },
   };
 };

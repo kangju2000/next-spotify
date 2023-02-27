@@ -16,8 +16,13 @@ export const useGetNewReleases = () => {
   return { data, error, isLoading };
 };
 
-export const useGetCategories = () => {
-  const { data, error, isLoading } = useQuery('categories', getCategories);
+export const useGetCategories = (
+  options?: UseQueryOptions<AxiosResponse<SpotifyApi.MultipleCategoriesResponse>, AxiosError>
+) => {
+  const { data, error, isLoading } = useQuery<
+    AxiosResponse<SpotifyApi.MultipleCategoriesResponse>,
+    AxiosError
+  >('categories', getCategories, options);
 
   return { data, error, isLoading };
 };

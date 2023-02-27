@@ -26,5 +26,6 @@ export const MoreButton = styled.button`
 
 export const Categories = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
 `;
