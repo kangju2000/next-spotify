@@ -7,13 +7,16 @@ export const getNewReleases = () => {
   });
 };
 
-export const getCategories = async () => {
+export const getCategories = async ({ pageParam = 0 }) => {
   const { data } = await api({
     method: 'get',
     url: 'https://api.spotify.com/v1/browse/categories',
+    params: {
+      offset: pageParam,
+    },
   });
 
-  return { data };
+  return { data, pageParam };
 };
 
 export const getCategory = (id: string) => {

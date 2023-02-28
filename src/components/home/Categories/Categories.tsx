@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import * as S from './Categories.styles';
 
 const Categories = () => {
-  const { data: categoriesData, isLoading: categoriesIsLoading } = useGetCategories();
+  const { data: categoriesData } = useGetCategories();
   const router = useRouter();
 
   const handleClick = () => {
