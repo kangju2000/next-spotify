@@ -7,11 +7,13 @@ export const getNewReleases = () => {
   });
 };
 
-export const getCategories = () => {
-  return api({
+export const getCategories = async () => {
+  const { data } = await api({
     method: 'get',
     url: 'https://api.spotify.com/v1/browse/categories',
   });
+
+  return { data };
 };
 
 export const getCategory = (id: string) => {
@@ -35,17 +37,19 @@ export const getRecommendationsGenres = () => {
   });
 };
 
-export const getRecommendations = (
+export const getRecommendations = async (
   params: Pick<
     SpotifyApi.RecommendationsOptionsObject,
     'seed_genres' | 'seed_artists' | 'seed_tracks' | 'limit'
   >
 ) => {
-  return api<SpotifyApi.RecommendationsFromSeedsResponse>({
+  const { data } = await api<SpotifyApi.RecommendationsFromSeedsResponse>({
     method: 'get',
     url: 'https://api.spotify.com/v1/recommendations',
     params,
   });
+
+  return { data };
 };
 
 export const getFeaturedPlaylists = () => {

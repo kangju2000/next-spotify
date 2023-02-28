@@ -2,50 +2,38 @@ import styled from '@emotion/styled';
 import { getCategories, getRecommendations } from 'api/browse';
 import Categories from 'components/home/Categories/Categories';
 import RecommendTracks from 'components/home/RecommendTracks/RecommendTracks';
-import { useGetCategories, useGetRecommendations } from 'hooks/queries/browse';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { GetServerSideProps } from 'next';
+import { dehydrate, QueryClient } from 'react-query';
 
-function Home({ tracks, categories }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log(tracks, categories);
-  const { data: recommendationsData } = useGetRecommendations(
-    {
-      seed_genres: 'k-pop',
-      limit: 4,
-    },
-    { initialData: tracks }
-  );
-
-  const { data: categoriesData } = useGetCategories({ initialData: categories });
-
+function Home() {
   return (
     <Container>
-      {recommendationsData?.data?.tracks && (
-        <RecommendTracks tracks={recommendationsData.data.tracks} />
-      )}
-      {categoriesData?.data?.categories && (
-        <Categories categories={categoriesData.data.categories} />
-      )}
+      <RecommendTracks />
+      <Categories />
     </Container>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const { data: recommendations } = await getRecommendations({
-    seed_genres: 'k-pop',
-    limit: 4,
-  });
+  const queryClient = new QueryClient();
 
-  const { data: categories } = await getCategories();
+  await queryClient.prefetchQuery('recommendations', () =>
+    getRecommendations({ seed_genres: 'k-pop', limit: 4 })
+  );
+
+  await queryClient.prefetchQuery('categories', () => getCategories());
 
   return {
     props: {
-      tracks: recommendations.tracks,
-      categories: categories.categories,
+      dehydratedState: dehydrate(queryClient),
     },
   };
 };
 
 export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   padding: 20px;
 `;
 

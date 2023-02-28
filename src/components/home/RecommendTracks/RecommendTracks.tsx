@@ -1,16 +1,18 @@
 import Track from 'components/common/Track/Track';
+import { useGetRecommendations } from 'hooks/queries/browse';
 import * as S from './RecommendTracks.styles';
 
-export interface RecommendTrackProps {
-  tracks: SpotifyApi.RecommendationTrackObject[];
-}
+const RecommendTracks = () => {
+  const { data: recommendationsData, isLoading: recommendationsIsLoading } = useGetRecommendations({
+    seed_genres: 'k-pop',
+    limit: 4,
+  });
 
-const RecommendTracks = ({ tracks }: RecommendTrackProps) => {
   return (
     <S.Container>
       <S.Title>추천 노래</S.Title>
       <S.Tracks>
-        {tracks.map((track) => (
+        {recommendationsData?.data.tracks.map((track) => (
           <Track key={track.id} track={track} />
         ))}
       </S.Tracks>

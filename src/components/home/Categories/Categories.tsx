@@ -1,13 +1,23 @@
 import Category from 'components/common/Category/Category';
+import ROUTES from 'constants/routes';
+import { useGetCategories } from 'hooks/queries/browse';
+import { useRouter } from 'next/router';
 import * as S from './Categories.styles';
 
-const Categories = ({ categories }: SpotifyApi.MultipleCategoriesResponse) => {
+const Categories = () => {
+  const { data: categoriesData, isLoading: categoriesIsLoading } = useGetCategories();
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(ROUTES.CATEGORIES);
+  };
+
   return (
     <S.Container>
       <S.Title>카테고리</S.Title>
-      <S.MoreButton>모두 보기</S.MoreButton>
+      <S.MoreButton onClick={handleClick}>모두 보기</S.MoreButton>
       <S.Categories>
-        {categories.items.slice(0, 8).map((category) => (
+        {categoriesData?.data.categories.items.slice(0, 8).map((category) => (
           <Category key={category.id} category={category} />
         ))}
       </S.Categories>

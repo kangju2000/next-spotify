@@ -2,8 +2,8 @@ import styled from '@emotion/styled';
 
 export const Container = styled.div<{ url: string }>`
   position: relative;
-  width: 300px;
-  height: 300px;
+  width: 230px;
+  height: 230px;
   border-radius: 5px;
   background-image: url(${({ url }) => url});
   background-size: cover;
@@ -18,7 +18,7 @@ export const Layer = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 100px;
+  height: 80px;
   padding: 20px;
   border-radius: 0 0 5px 5px;
   background-color: rgba(0, 0, 0, 0.5);
@@ -30,8 +30,7 @@ export const Name = styled.h2`
   font-weight: 700;
   overflow: hidden;
   text-overflow: ellipsis;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
 `;
 
 export const Artist = styled.p`

@@ -1,6 +1,6 @@
 import api from 'api/api';
 
-const Search = () => {
+const SearchPage = () => {
   const handleClick = async () => {
     const res = await api({
       method: 'get',
@@ -28,4 +28,4 @@ const Search = () => {
 //   };
 // };
 
-export default Search;
+export default SearchPage;
