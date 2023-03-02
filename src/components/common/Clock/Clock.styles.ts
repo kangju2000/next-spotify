@@ -16,3 +16,7 @@ export const Time = styled.p`
 export const Date = styled.p`
   font-size: 12px;
 `;
+
+export const Loading = styled.div`
+  margin-left: 30px;
+`;

@@ -17,7 +17,7 @@ const Categories = () => {
       <S.Title>카테고리</S.Title>
       <S.MoreButton onClick={handleClick}>모두 보기</S.MoreButton>
       <S.Categories>
-        {categoriesData?.data.categories.items.slice(0, 8).map((category) => (
+        {categoriesData?.pages[0].data.categories.items.slice(0, 8).map((category) => (
           <Category key={category.id} category={category} />
         ))}
       </S.Categories>

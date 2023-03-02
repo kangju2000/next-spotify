@@ -1,9 +1,6 @@
 import styled from '@emotion/styled';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { getCategories, getRecommendations } from 'api/browse';
 import Categories from 'components/home/Categories/Categories';
 import RecommendTracks from 'components/home/RecommendTracks/RecommendTracks';
-import { GetServerSideProps } from 'next';
 
 function Home() {
   return (
@@ -13,22 +10,6 @@ function Home() {
     </Container>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery(['recommendations'], () =>
-    getRecommendations({ seed_genres: 'k-pop', limit: 4 })
-  );
-
-  await queryClient.prefetchQuery(['categories'], () => getCategories({}));
-
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-};
 
 export const Container = styled.div`
   display: flex;

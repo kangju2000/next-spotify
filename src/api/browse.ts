@@ -8,7 +8,7 @@ export const getNewReleases = () => {
 };
 
 export const getCategories = async ({ pageParam = 0 }) => {
-  const { data } = await api({
+  const { data } = await api<SpotifyApi.MultipleCategoriesResponse>({
     method: 'get',
     url: 'https://api.spotify.com/v1/browse/categories',
     params: {

@@ -1,23 +1,12 @@
-import { useQueryClient } from '@tanstack/react-query';
 import Track from 'components/common/Track/Track';
 import { useGetRecommendations } from 'hooks/queries/browse';
 import * as S from './RecommendTracks.styles';
 
 const RecommendTracks = () => {
-  const queryClient = useQueryClient();
-
-  const { data: recommendationsData } = useGetRecommendations(
-    {
-      seed_genres: 'k-pop',
-      limit: 4,
-    },
-    {
-      staleTime: Infinity,
-      onSuccess: () => {
-        queryClient.setQueryData('recommendations', recommendationsData);
-      },
-    }
-  );
+  const { data: recommendationsData } = useGetRecommendations({
+    seed_genres: 'k-pop',
+    limit: 4,
+  });
 
   return (
     <S.Container>

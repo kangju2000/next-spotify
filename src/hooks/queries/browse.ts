@@ -1,4 +1,9 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import {
+  useQuery,
+  useInfiniteQuery,
+  type UseQueryOptions,
+  type UseInfiniteQueryOptions,
+} from '@tanstack/react-query';
 import {
   getCategories,
   getCategory,
@@ -11,20 +16,28 @@ import {
 import type { AxiosError } from 'axios';
 
 export const useGetNewReleases = () => {
-  const { data, error, isLoading } = useQuery(['newReleases'], getNewReleases);
+  const { data, error, isLoading } = useQuery(['newReleases'], () => getNewReleases());
 
   return { data, error, isLoading };
 };
 
-export const useGetCategories = (
-  options?: UseQueryOptions<{ data: SpotifyApi.MultipleCategoriesResponse }, AxiosError>
-) => {
-  const { data, error, isLoading } = useQuery<
-    { data: SpotifyApi.MultipleCategoriesResponse },
-    AxiosError
-  >(['categories'], getCategories, options);
+export type InfiniteCategoriesResponse = {
+  data: SpotifyApi.MultipleCategoriesResponse;
+  pageParam: number;
+};
 
-  return { data, error, isLoading };
+export const useGetCategories = (
+  options?: UseInfiniteQueryOptions<InfiniteCategoriesResponse, AxiosError>
+) => {
+  return useInfiniteQuery<InfiniteCategoriesResponse, AxiosError>(
+    ['categories'],
+    ({ pageParam = 0 }) => getCategories({ pageParam }),
+    {
+      getNextPageParam: (lastPage) =>
+        lastPage.data.categories.next ? lastPage.pageParam + 20 : undefined,
+      ...options,
+    }
+  );
 };
 
 export const useGetCategory = (id: string) => {
