@@ -1,14 +1,14 @@
 import { css } from '@emotion/react';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { getCategories } from 'api/browse';
 import Category from 'components/common/Category/Category';
 import useIntersect from 'hooks/useIntersect';
 import { RotatingLines } from 'react-loader-spinner';
-import { useInfiniteQuery } from 'react-query';
 import * as S from './styles';
 
 const CategoresPage = () => {
   const { data, isFetching, fetchNextPage, hasNextPage } = useInfiniteQuery(
-    'categories',
+    ['categories'],
     getCategories,
     {
       getNextPageParam: (lastPage) => {
@@ -29,9 +29,8 @@ const CategoresPage = () => {
 
   return (
     <S.Container>
-      {console.log(isFetching)}
       <S.FlexBox>
-        {data?.pages.map((page) =>
+        {data?.pages?.map((page) =>
           page?.data?.categories?.items.map((category: SpotifyApi.CategoryObject) => (
             <Category key={category.id} category={category} />
           ))

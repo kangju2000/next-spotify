@@ -1,3 +1,4 @@
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
 import {
   getCategories,
   getCategory,
@@ -8,10 +9,9 @@ import {
   getRecommendationsGenres,
 } from 'api/browse';
 import type { AxiosError } from 'axios';
-import { useQuery, UseQueryOptions } from 'react-query';
 
 export const useGetNewReleases = () => {
-  const { data, error, isLoading } = useQuery('newReleases', getNewReleases);
+  const { data, error, isLoading } = useQuery(['newReleases'], getNewReleases);
 
   return { data, error, isLoading };
 };
@@ -22,7 +22,7 @@ export const useGetCategories = (
   const { data, error, isLoading } = useQuery<
     { data: SpotifyApi.MultipleCategoriesResponse },
     AxiosError
-  >('categories', getCategories, options);
+  >(['categories'], getCategories, options);
 
   return { data, error, isLoading };
 };
@@ -42,7 +42,7 @@ export const useGetCategoryPlaylists = (id: string) => {
 };
 
 export const useGetRecommendationsGenres = () => {
-  const { data, error, isLoading } = useQuery('recommendationsGenres', getRecommendationsGenres);
+  const { data, error, isLoading } = useQuery(['recommendationsGenres'], getRecommendationsGenres);
 
   return { data, error, isLoading };
 };
@@ -52,7 +52,7 @@ export const useGetRecommendations = (
   options?: UseQueryOptions<{ data: SpotifyApi.RecommendationsFromSeedsResponse }, AxiosError>
 ) => {
   return useQuery<{ data: SpotifyApi.RecommendationsFromSeedsResponse }, AxiosError>(
-    'recommendations',
+    ['recommendations'],
     () => getRecommendations({ seed_genres, seed_artists, seed_tracks, limit }),
     {
       enabled: !!seed_genres || !!seed_artists || !!seed_tracks,
@@ -62,7 +62,7 @@ export const useGetRecommendations = (
 };
 
 export const useGetFeaturedPlaylists = () => {
-  const { data, error, isLoading } = useQuery('featuredPlaylists', getFeaturedPlaylists);
+  const { data, error, isLoading } = useQuery(['featuredPlaylists'], getFeaturedPlaylists);
 
   return { data, error, isLoading };
 };
