@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
+import { RotatingLines } from 'react-loader-spinner';
 import Category from 'components/common/Category/Category';
 import { useGetCategories } from 'hooks/queries/browse';
 import useIntersect from 'hooks/useIntersect';
-import { RotatingLines } from 'react-loader-spinner';
 import * as S from './styles';
 
 const CategoresPage = () => {

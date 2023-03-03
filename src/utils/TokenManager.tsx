@@ -1,5 +1,5 @@
-import api from 'api/api';
 import { Cookies } from 'react-cookie';
+import api from 'api/api';
 
 const cookies = new Cookies();
 

@@ -1,9 +1,9 @@
 import { ThemeProvider } from '@emotion/react';
 import { QueryClientProvider, QueryClient, Hydrate } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import Layout from 'components/common/Layout/Layout';
 import { AppProps } from 'next/app';
 import { useState } from 'react';
+import Layout from 'components/common/Layout/Layout';
 import GlobalStyle from 'styles/GlobalStyle';
 import theme from 'styles/theme';
 

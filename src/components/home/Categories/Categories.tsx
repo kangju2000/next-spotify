@@ -1,7 +1,7 @@
+import { useRouter } from 'next/router';
 import Category from 'components/common/Category/Category';
 import ROUTES from 'constants/routes';
 import { useGetCategories } from 'hooks/queries/browse';
-import { useRouter } from 'next/router';
 import * as S from './Categories.styles';
 
 const Categories = () => {

@@ -1,11 +1,10 @@
 import styled from '@emotion/styled';
 
-export const Container = styled.div`
-
-`;
+export const Container = styled.div``;
 
 export const FlexBox = styled.div`
   display: flex;
+  margin-left: 30px;
   flex-wrap: wrap;
-  gap: 50px;
+  gap: 30px;
 `;

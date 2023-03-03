@@ -1,5 +1,5 @@
-import { postToken } from 'api/token';
 import axios from 'axios';
+import { postToken } from 'api/token';
 import { BASE_URL } from 'constants/path';
 
 const api = axios.create({

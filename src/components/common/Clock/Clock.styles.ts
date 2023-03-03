@@ -3,7 +3,6 @@ import styled from '@emotion/styled';
 export const Clock = styled.div`
   display: flex;
   flex-direction: column;
-  padding-left: 20px;
   color: ${({ theme }) => theme.colors.white};
 `;
 

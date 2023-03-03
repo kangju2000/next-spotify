@@ -4,6 +4,7 @@ import {
   type UseQueryOptions,
   type UseInfiniteQueryOptions,
 } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 import {
   getCategories,
   getCategory,
@@ -13,7 +14,6 @@ import {
   getRecommendations,
   getRecommendationsGenres,
 } from 'api/browse';
-import type { AxiosError } from 'axios';
 
 export const useGetNewReleases = () => {
   const { data, error, isLoading } = useQuery(['newReleases'], () => getNewReleases());
