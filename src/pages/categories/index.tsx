@@ -3,7 +3,7 @@ import { RotatingLines } from 'react-loader-spinner';
 import Category from 'components/common/Category/Category';
 import { useGetCategories } from 'hooks/queries/browse';
 import useIntersect from 'hooks/useIntersect';
-import * as S from './styles';
+import * as S from './index.styles';
 
 const CategoresPage = () => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetCategories();
