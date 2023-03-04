@@ -28,8 +28,8 @@ export type InfiniteCategoriesResponse = {
 
 export const useGetCategories = (
   options?: UseInfiniteQueryOptions<InfiniteCategoriesResponse, AxiosError>
-) => {
-  return useInfiniteQuery<InfiniteCategoriesResponse, AxiosError>(
+) =>
+  useInfiniteQuery<InfiniteCategoriesResponse, AxiosError>(
     ['categories'],
     ({ pageParam = 0 }) => getCategories({ pageParam }),
     {
@@ -38,7 +38,6 @@ export const useGetCategories = (
       ...options,
     }
   );
-};
 
 export const useGetCategory = (id: string) => {
   const { data, error, isLoading } = useQuery(['category', id], () => getCategory(id));
@@ -46,13 +45,15 @@ export const useGetCategory = (id: string) => {
   return { data, error, isLoading };
 };
 
-export const useGetCategoryPlaylists = (id: string) => {
-  const { data, error, isLoading } = useQuery(['categoryPlaylists', id], () =>
-    getCategoryPlaylists(id)
+export const useGetCategoryPlaylists = (id: string) =>
+  useInfiniteQuery(
+    ['categoryPlaylists', id],
+    ({ pageParam = 0 }) => getCategoryPlaylists({ pageParam, id }),
+    {
+      getNextPageParam: (lastPage) =>
+        lastPage.data.playlists.next ? lastPage.pageParam + 20 : undefined,
+    }
   );
-
-  return { data, error, isLoading };
-};
 
 export const useGetRecommendationsGenres = () => {
   const { data, error, isLoading } = useQuery(['recommendationsGenres'], getRecommendationsGenres);

@@ -3,9 +3,8 @@ import { RotatingLines } from 'react-loader-spinner';
 import Category from 'components/common/Category/Category';
 import { useGetCategories } from 'hooks/queries/browse';
 import useIntersect from 'hooks/useIntersect';
-import * as S from './index.styles';
 
-const CategoresPage = () => {
+const CategoriesPage = () => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetCategories();
 
   const targetRef = useIntersect<HTMLDivElement>((entry, observer) => {
@@ -17,14 +16,21 @@ const CategoresPage = () => {
   }, 0.7);
 
   return (
-    <S.Container>
-      <S.FlexBox>
+    <>
+      <div
+        css={css`
+          display: flex;
+          margin-left: 30px;
+          flex-wrap: wrap;
+          gap: 30px;
+        `}
+      >
         {data?.pages?.map((page) =>
           page.data.categories.items.map((category: SpotifyApi.CategoryObject) => (
             <Category key={category.id} category={category} />
           ))
         )}
-      </S.FlexBox>
+      </div>
       <div
         ref={targetRef}
         css={css`
@@ -50,8 +56,8 @@ const CategoresPage = () => {
           />
         </div>
       )}
-    </S.Container>
+    </>
   );
 };
 
-export default CategoresPage;
+export default CategoriesPage;

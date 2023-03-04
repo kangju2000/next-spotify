@@ -15,6 +15,7 @@ export const Thumbnail = styled.img`
 
 export const Info = styled.div`
   position: relative;
+  width: 100%;
   margin-left: 10px;
 `;
 
@@ -25,6 +26,7 @@ export const Name = styled.h2`
 `;
 
 export const Description = styled.p`
+  line-height: 1.2;
   color: ${({ theme }) => theme.colors.lightgray};
 `;
 

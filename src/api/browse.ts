@@ -26,11 +26,22 @@ export const getCategory = (id: string) => {
   });
 };
 
-export const getCategoryPlaylists = (id: string) => {
-  return api({
+export const getCategoryPlaylists = async ({
+  pageParam,
+  id,
+}: {
+  pageParam: number;
+  id: string;
+}) => {
+  const { data } = await api<SpotifyApi.CategoryPlaylistsResponse>({
     method: 'get',
     url: `https://api.spotify.com/v1/browse/categories/${id}/playlists`,
+    params: {
+      offset: pageParam,
+    },
   });
+
+  return { data, pageParam };
 };
 
 export const getRecommendationsGenres = () => {
