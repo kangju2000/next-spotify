@@ -44,6 +44,18 @@ export const getCategoryPlaylists = async ({
   return { data, pageParam };
 };
 
+export const getPlaylistTracks = async ({ pageParam, id }: { pageParam: number; id: string }) => {
+  const { data } = await api<SpotifyApi.PlaylistTrackResponse>({
+    method: 'get',
+    url: `https://api.spotify.com/v1/playlists/${id}/tracks`,
+    params: {
+      offset: pageParam,
+    },
+  });
+
+  return { data, pageParam };
+};
+
 export const getRecommendationsGenres = () => {
   return api({
     method: 'get',
