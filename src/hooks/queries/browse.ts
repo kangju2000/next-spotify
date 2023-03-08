@@ -7,6 +7,7 @@ import {
   getCategoryPlaylists,
   getFeaturedPlaylists,
   getNewReleases,
+  getPlaylist,
   getPlaylistTracks,
   getRecommendations,
   getRecommendationsGenres,
@@ -43,6 +44,8 @@ export const useGetCategoryPlaylists = (id: string) =>
         lastPage.data.playlists.next ? lastPage.pageParam + 20 : undefined,
     }
   );
+
+export const useGetPlaylist = (id: string) => useQuery(['playlist', id], () => getPlaylist(id));
 
 export const useGetPlaylistTracks = (id: string) =>
   useInfiniteQuery(

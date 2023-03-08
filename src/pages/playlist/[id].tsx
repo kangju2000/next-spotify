@@ -2,10 +2,11 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
+import Image from 'next/image';
 import { getPlaylistTracks } from 'api/browse';
 import PlaylistTrack from 'components/common/PlaylistTrack/PlaylistTrack';
 import TargetDiv from 'components/common/TargetDiv/TargetDiv';
-import { useGetPlaylistTracks } from 'hooks/queries/browse';
+import { useGetPlaylist, useGetPlaylistTracks } from 'hooks/queries/browse';
 
 interface PlaylistPageProps {
   id: string;
@@ -13,11 +14,25 @@ interface PlaylistPageProps {
 
 const PlaylistPage = ({ id }: PlaylistPageProps) => {
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useGetPlaylistTracks(id);
+  const { data: playlistData } = useGetPlaylist(id);
+
   let playlistNumber = 1;
-  console.log(data);
+  console.log(playlistData?.data);
 
   return (
     <S.Container>
+      <S.Playlist>
+        <Image
+          src={playlistData?.data.images[0].url ?? ''}
+          alt={playlistData?.data.name ?? '플레이리스트 이미지'}
+          width={300}
+          height={300}
+          css={css`
+            border-radius: 5px;
+          `}
+        />
+        <S.Description>{playlistData?.data.description}</S.Description>
+      </S.Playlist>
       <S.Tracks>
         {data?.pages.map((page) =>
           page.data.items.map((track) => {
@@ -63,6 +78,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const S = {
   Container: styled.div``,
+  Playlist: styled.div`
+    display: flex;
+    margin-bottom: 30px;
+  `,
+  Description: styled.div`
+    margin-left: 20px;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+  `,
   Tracks: styled.div`
     display: flex;
     flex-direction: column;
