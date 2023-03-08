@@ -12,11 +12,7 @@ import {
   getRecommendationsGenres,
 } from 'api/browse';
 
-export const useGetNewReleases = () => {
-  const { data, error, isLoading } = useQuery(['newReleases'], () => getNewReleases());
-
-  return { data, error, isLoading };
-};
+export const useGetNewReleases = () => useQuery(['newReleases'], () => getNewReleases());
 
 export type InfiniteCategoriesResponse = {
   data: SpotifyApi.MultipleCategoriesResponse;
@@ -36,11 +32,7 @@ export const useGetCategories = (
     }
   );
 
-export const useGetCategory = (id: string) => {
-  const { data, error, isLoading } = useQuery(['category', id], () => getCategory(id));
-
-  return { data, error, isLoading };
-};
+export const useGetCategory = (id: string) => useQuery(['category', id], () => getCategory(id));
 
 export const useGetCategoryPlaylists = (id: string) =>
   useInfiniteQuery(
@@ -61,11 +53,8 @@ export const useGetPlaylistTracks = (id: string) =>
     }
   );
 
-export const useGetRecommendationsGenres = () => {
-  const { data, error, isLoading } = useQuery(['recommendationsGenres'], getRecommendationsGenres);
-
-  return { data, error, isLoading };
-};
+export const useGetRecommendationsGenres = () =>
+  useQuery(['recommendationsGenres'], getRecommendationsGenres);
 
 export const useGetRecommendations = (
   { seed_genres, seed_artists, seed_tracks, limit }: SpotifyApi.RecommendationsOptionsObject,
@@ -78,8 +67,4 @@ export const useGetRecommendations = (
   );
 };
 
-export const useGetFeaturedPlaylists = () => {
-  const { data, error, isLoading } = useQuery(['featuredPlaylists'], getFeaturedPlaylists);
-
-  return { data, error, isLoading };
-};
+export const useGetFeaturedPlaylists = () => useQuery(['featuredPlaylists'], getFeaturedPlaylists);

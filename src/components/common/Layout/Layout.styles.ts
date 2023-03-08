@@ -7,8 +7,10 @@ export const Container = styled.div`
   padding-left: 100px;
   background: linear-gradient(#222222, #121212);
   color: ${({ theme }) => theme.colors.white};
+  overflow: hidden;
 `;
 
 export const Content = styled.div`
+  width: 100%;
   padding: 0 30px;
 `;

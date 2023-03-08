@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useEffect } from 'react';
+import { useSetRecoilState, useRecoilState } from 'recoil';
 import Clock from 'components/common/Clock/Clock';
 import SearchInput from 'components/common/SearchInput/SearchInput';
 import useDebounce from 'hooks/useDebounce';
-import { searchQueryState } from 'recoil/atoms';
+import { searchQueryState, searchValueState } from 'recoil/atoms';
 import * as S from './Header.styles';
 
 const Header = () => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useRecoilState(searchValueState);
   const setQuery = useSetRecoilState(searchQueryState);
   const debouncedValue = useDebounce(value, 700);
 
@@ -24,6 +24,7 @@ const Header = () => {
       <Clock />
       <SearchInput
         type="text"
+        value={value}
         onChange={handleChange}
         placeholder="듣고 싶은 음악을 검색해보세요."
       />

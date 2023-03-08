@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
 import { getPlaylistTracks } from 'api/browse';
@@ -12,23 +13,37 @@ interface PlaylistPageProps {
 
 const PlaylistPage = ({ id }: PlaylistPageProps) => {
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useGetPlaylistTracks(id);
+  let playlistNumber = 1;
   console.log(data);
 
   return (
-    <>
-      <div css={css``}>
+    <S.Container>
+      <S.Tracks>
         {data?.pages.map((page) =>
-          page.data.items.map(
-            (track) => track.track && <PlaylistTrack key={track.track.id} track={track.track} />
-          )
+          page.data.items.map((track) => {
+            if (track.track) {
+              return (
+                <div
+                  key={track.track.id}
+                  css={css`
+                    display: flex;
+                    align-items: center;
+                  `}
+                >
+                  <S.PlaylistNumber>{playlistNumber++}</S.PlaylistNumber>
+                  <PlaylistTrack track={track.track} />
+                </div>
+              );
+            }
+          })
         )}
-      </div>
+      </S.Tracks>
       <TargetDiv
         fetchNextPage={fetchNextPage}
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
       />
-    </>
+    </S.Container>
   );
 };
 
@@ -44,6 +59,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: { dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))), id },
   };
+};
+
+const S = {
+  Container: styled.div``,
+  Tracks: styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  `,
+  PlaylistNumber: styled.p`
+    margin-right: 10px;
+  `,
 };
 
 export default PlaylistPage;
