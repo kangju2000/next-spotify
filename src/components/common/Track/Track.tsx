@@ -8,6 +8,7 @@ const Track = ({ track }: TrackProps) => {
   const handleNameClick = () => {
     console.log(track.album);
   };
+
   const handleArtistClick = () => {
     console.log(track.artists[0].id);
   };

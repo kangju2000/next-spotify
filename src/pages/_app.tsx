@@ -3,6 +3,7 @@ import { QueryClientProvider, QueryClient, Hydrate } from '@tanstack/react-query
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppProps } from 'next/app';
 import { useState } from 'react';
+import { RecoilRoot } from 'recoil';
 import Layout from 'components/common/Layout/Layout';
 import GlobalStyle from 'styles/GlobalStyle';
 import theme from 'styles/theme';
@@ -20,17 +21,19 @@ function App({ Component, pageProps }: AppProps) {
   });
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={true} />
-      <Hydrate state={pageProps?.dehydratedState}>
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </ThemeProvider>
-      </Hydrate>
-    </QueryClientProvider>
+    <RecoilRoot>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={true} />
+        <Hydrate state={pageProps.dehydratedState}>
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </ThemeProvider>
+        </Hydrate>
+      </QueryClientProvider>
+    </RecoilRoot>
   );
 }
 

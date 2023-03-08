@@ -1,9 +1,5 @@
-import {
-  useQuery,
-  useInfiniteQuery,
-  type UseQueryOptions,
-  type UseInfiniteQueryOptions,
-} from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
+import type { UseQueryOptions, UseInfiniteQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 import {
   getCategories,
@@ -78,10 +74,7 @@ export const useGetRecommendations = (
   return useQuery<{ data: SpotifyApi.RecommendationsFromSeedsResponse }, AxiosError>(
     ['recommendations'],
     () => getRecommendations({ seed_genres, seed_artists, seed_tracks, limit }),
-    {
-      enabled: !!seed_genres || !!seed_artists || !!seed_tracks,
-      ...options,
-    }
+    options
   );
 };
 

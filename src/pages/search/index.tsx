@@ -1,31 +1,20 @@
+import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import api from 'api/api';
+import { searchQueryState } from 'recoil/atoms';
 
 const SearchPage = () => {
-  const handleClick = async () => {
-    const res = await api({
+  const query = useRecoilValue(searchQueryState);
+  const [searchData, setSearchData] = useState<SpotifyApi.ArtistSearchResponse | null>(null);
+
+  useEffect(() => {
+    api({
       method: 'get',
-      url: `/v1/search?q=a&type=artist`,
-    });
-    console.log(res.data);
-  };
+      url: `/v1/search?q=${query}&type=artist`,
+    }).then((res) => setSearchData(res.data));
+  }, [query]);
 
-  return (
-    <>
-      <button onClick={handleClick}>클릭</button>
-      {/* {searchData &&
-        searchData[searchData['type']]['items'].map((item: artist | album) => (
-          <p key={item.id}>{item.name}</p>
-        ))} */}
-    </>
-  );
+  return <>{console.log(searchData)}</>;
 };
-
-// export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-//   const response = await getSearch(query as getSearchQuery);
-
-//   return {
-//     props: { data: response.data },
-//   };
-// };
 
 export default SearchPage;
