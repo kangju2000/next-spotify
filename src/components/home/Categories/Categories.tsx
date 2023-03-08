@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router';
+import { ThreeDots } from 'react-loader-spinner';
 import Category from 'components/common/Category/Category';
 import ROUTES from 'constants/routes';
 import { useGetCategories } from 'hooks/queries/browse';
 import * as S from './Categories.styles';
 
 const Categories = () => {
-  const { data: categoriesData } = useGetCategories();
+  const { data: categoriesData, isLoading } = useGetCategories();
   const router = useRouter();
 
   const handleClick = () => {
@@ -17,9 +18,20 @@ const Categories = () => {
       <S.Title>카테고리</S.Title>
       <S.MoreButton onClick={handleClick}>모두 보기</S.MoreButton>
       <S.Categories>
-        {categoriesData?.pages[0].data.categories.items.slice(0, 8).map((category) => (
-          <Category key={category.id} category={category} />
-        ))}
+        {isLoading ? (
+          <ThreeDots
+            height="80"
+            width="80"
+            radius="9"
+            color="#4fa94d"
+            ariaLabel="three-dots-loading"
+            visible={true}
+          />
+        ) : (
+          categoriesData?.pages[0].data.categories.items
+            .slice(0, 8)
+            .map((category) => <Category key={category.id} category={category} />)
+        )}
       </S.Categories>
     </S.Container>
   );
