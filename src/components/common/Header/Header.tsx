@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useSetRecoilState, useRecoilState } from 'recoil';
 import Clock from 'components/common/Clock/Clock';
@@ -10,6 +11,8 @@ const Header = () => {
   const [value, setValue] = useRecoilState(searchValueState);
   const setQuery = useSetRecoilState(searchQueryState);
   const debouncedValue = useDebounce(value, 700);
+
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
@@ -28,6 +31,7 @@ const Header = () => {
         onChange={handleChange}
         placeholder="듣고 싶은 음악을 검색해보세요."
       />
+      <button onClick={() => router.push('/api/login')}>로그인</button>
     </S.Container>
   );
 };

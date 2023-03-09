@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { postToken } from 'api/token';
-import { BASE_URL } from 'constants/path';
+import { BASE_API_URL } from 'constants/path';
 
 const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: BASE_API_URL,
 });
 
 api.interceptors.request.use(
