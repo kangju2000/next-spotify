@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { postToken } from 'api/token';
+import { getCookie, setCookie } from 'cookies-next';
+import { postRefreshToken, postAuthorizationToken } from 'api/token';
 import { BASE_API_URL } from 'constants/path';
 
 const api = axios.create({
@@ -8,6 +9,13 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (req) => {
+    if (typeof window !== 'undefined') {
+      const access_token = getCookie('access_token');
+      if (access_token) {
+        api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+      }
+    }
+
     return req;
   },
   (error) => Promise.reject(error)
@@ -20,12 +28,20 @@ api.interceptors.response.use(
 
     if (response?.status === 401 && !config._retry) {
       config._retry = true;
+      const refresh_token = getCookie('refresh_token') as string;
+      if (!refresh_token) {
+        const { data } = await postAuthorizationToken();
+        api.defaults.headers.common['Authorization'] = `Bearer ${data.access_token}`;
+        setCookie('access_token', data.access_token, {
+          maxAge: data.expires_in,
+        });
 
-      const {
-        data: { access_token },
-      } = await postToken();
+        return Promise.reject(error);
+      }
 
-      api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+      const { data } = await postRefreshToken(refresh_token);
+      api.defaults.headers.common['Authorization'] = `Bearer ${data.access_token}`;
+
       return api(config);
     }
 

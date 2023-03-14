@@ -1,13 +1,12 @@
-import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import qs from 'querystring';
-import { BASE_URL } from 'constants/path';
+import { postAccessToken } from 'api/token';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const code = req.query.code || null;
-  const state = req.query.state || null;
+  const code = typeof req.query.code === 'string' ? req.query.code : null;
+  const state = typeof req.query.state === 'string' ? req.query.state : null;
 
-  if (state === null) {
+  if (state === null || code === null) {
     res.redirect(
       '/#' +
         qs.stringify({
@@ -15,29 +14,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         })
     );
   } else {
-    axios({
-      method: 'post',
-      url: 'https://accounts.spotify.com/api/token',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization:
-          'Basic ' +
-          Buffer.from(
-            process.env.NEXT_PUBLIC_CLIENT_ID + ':' + process.env.NEXT_PUBLIC_CLIENT_SECRET
-          ).toString('base64'),
-      },
-      data: qs.stringify({
-        code: code,
-        redirect_uri: BASE_URL + '/api/callback',
-        grant_type: 'authorization_code',
-      }),
-    })
+    postAccessToken(code)
       .then((response) => {
         res.setHeader('Set-Cookie', [
           `access_token=${response.data.access_token}; path=/; max-age=${response.data.expires_in}`,
           `refresh_token=${response.data.refresh_token}; path=/; max-age=${response.data.expires_in}`,
         ]);
-        
+
         res.redirect('/');
       })
       .catch((error) => {

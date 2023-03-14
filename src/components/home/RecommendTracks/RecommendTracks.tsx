@@ -5,7 +5,7 @@ import * as S from './RecommendTracks.styles';
 
 const RecommendTracks = () => {
   const { data: recommendationsData, isLoading } = useGetRecommendations({
-    seed_genres: 'k-pop',
+    seed_genres: 'pop',
     limit: 4,
   });
 
