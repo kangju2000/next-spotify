@@ -8,12 +8,31 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(
-  (req) => {
+  async (req) => {
     if (typeof window !== 'undefined') {
       const access_token = getCookie('access_token');
+      const refresh_token = getCookie('refresh_token') as string;
+
       if (access_token) {
-        api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+        req.headers['Authorization'] = `Bearer ${access_token}`;
+        return req;
       }
+
+      if (refresh_token) {
+        const { data } = await postRefreshToken(refresh_token);
+        req.headers['Authorization'] = `Bearer ${data.access_token}`;
+        setCookie('access_token', data.access_token, {
+          maxAge: data.expires_in,
+        });
+
+        return req;
+      }
+
+      const { data } = await postAuthorizationToken();
+      req.headers['Authorization'] = `Bearer ${data.access_token}`;
+      setCookie('access_token', data.access_token, {
+        maxAge: data.expires_in,
+      });
     }
 
     return req;
@@ -29,6 +48,7 @@ api.interceptors.response.use(
     if (response?.status === 401 && !config._retry) {
       config._retry = true;
       const refresh_token = getCookie('refresh_token') as string;
+
       if (!refresh_token) {
         const { data } = await postAuthorizationToken();
         api.defaults.headers.common['Authorization'] = `Bearer ${data.access_token}`;
@@ -41,13 +61,15 @@ api.interceptors.response.use(
 
       const { data } = await postRefreshToken(refresh_token);
       api.defaults.headers.common['Authorization'] = `Bearer ${data.access_token}`;
+      setCookie('access_token', data.access_token, {
+        maxAge: data.expires_in,
+      });
 
       return api(config);
     }
 
     return Promise.reject(error);
-  },
-  { synchronous: true }
+  }
 );
 
 export default api;

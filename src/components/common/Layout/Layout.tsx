@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil';
-import Header from 'components/common/Header/Header';
+import Header from 'components/common/Header';
 import Sidebar from 'components/common/Sidebar/Sidebar';
 import SearchPage from 'pages/search';
 import { searchQueryState } from 'recoil/atoms';

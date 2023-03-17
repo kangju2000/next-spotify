@@ -9,8 +9,13 @@
     "lint": "next lint --fix"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.5",
+    "@emotion/react": "^11.10.6",
+    "@emotion/server": "^11.10.0",
     "@emotion/styled": "^11.10.5",
+    "@mantine/core": "^6.0.2",
+    "@mantine/hooks": "^6.0.2",
+    "@mantine/next": "^6.0.2",
+    "@mantine/notifications": "^6.0.2",
     "@tanstack/react-query": "^4.24.10",
     "@tanstack/react-query-devtools": "^4.24.12",
     "@types/next": "^9.0.0",

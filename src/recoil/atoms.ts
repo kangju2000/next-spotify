@@ -9,3 +9,8 @@ export const searchQueryState = atom({
   key: 'searchQueryState',
   default: '',
 });
+
+export const loginDataState = atom<SpotifyApi.UserProfileResponse | null>({
+  key: 'loginDataState',
+  default: null,
+});
