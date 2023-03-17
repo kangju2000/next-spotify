@@ -36,7 +36,11 @@ const User = () => {
           src={loginData.images && loginData.images[0].url}
           size="lg"
           radius="xl"
-          styles={{ cursor: 'pointer' }}
+          styles={{
+            root: {
+              cursor: 'pointer',
+            },
+          }}
         >
           {loginData.display_name}
         </Avatar>

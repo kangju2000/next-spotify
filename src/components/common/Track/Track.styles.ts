@@ -34,6 +34,6 @@ export const Name = styled.h2`
 `;
 
 export const Artist = styled.p`
-  font-weight: 12px;
-  color: #d9d9d9;
+  font-size: 12px;
+  color: ${({ theme }) => theme.colors.lightgray};
 `;

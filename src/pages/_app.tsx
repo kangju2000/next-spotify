@@ -9,7 +9,7 @@ import { AppProps, AppContext } from 'next/app';
 import { useState } from 'react';
 import { RecoilRoot } from 'recoil';
 import type { MutableSnapshot } from 'recoil';
-import Layout from 'components/common/Layout/Layout';
+import Layout from 'components/common/Layout';
 import { loginDataState } from 'recoil/atoms';
 import GlobalStyle from 'styles/GlobalStyle';
 import theme from 'styles/theme';
@@ -62,23 +62,18 @@ function App({ Component, pageProps, loginData }: MyAppProps) {
 App.getInitialProps = async (context: AppContext) => {
   const { ctx, Component } = context;
   let pageProps = {};
-  let loginData: SpotifyApi.UserProfileResponse | null = null;
 
   const accessToken = getCookie('access_token', ctx);
 
-  try {
-    const { data } = await axios<SpotifyApi.UserProfileResponse>({
-      method: 'get',
-      url: 'https://api.spotify.com/v1/me',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    loginData = data;
-  } catch (e) {
-    loginData = null;
-  }
+  const { data: loginData } = await axios<SpotifyApi.UserProfileResponse>({
+    method: 'get',
+    url: 'https://api.spotify.com/v1/me',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  }).catch(() => {
+    return { data: null };
+  });
 
   if (Component.getInitialProps) {
     pageProps = await Component.getInitialProps(ctx);
