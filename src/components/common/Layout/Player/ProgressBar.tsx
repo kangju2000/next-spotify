@@ -1,12 +1,23 @@
 import styled from '@emotion/styled';
 import { Progress } from '@mantine/core';
+import msToTime from 'utils/msToTime';
 
-const ProgressBar = () => {
+interface ProgressBarProps {
+  progressTime: number | null;
+  durationTime: number | null;
+}
+
+const ProgressBar = ({ progressTime, durationTime }: ProgressBarProps) => {
+  progressTime = progressTime || 0;
+  durationTime = durationTime || 0;
+
+  const progressValue = (progressTime / durationTime) * 100;
+
   return (
     <S.Container>
-      <S.TimeText>0:00</S.TimeText>
-      <Progress size="sm" value={50} color="white" bg="#a1a1a1" />
-      <S.TimeText>3:44</S.TimeText>
+      <S.TimeText>{msToTime(progressTime)}</S.TimeText>
+      <Progress size="sm" value={progressValue} color="white" bg="#a1a1a1" />
+      <S.TimeText>{msToTime(durationTime)}</S.TimeText>
     </S.Container>
   );
 };

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import type { UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError, AxiosResponse } from 'axios';
-import { getUser } from 'api/user';
+import { getUser } from 'api/me';
 
 export const useGetUser = (
   options?: UseQueryOptions<AxiosResponse<SpotifyApi.UserProfileResponse>, AxiosError>

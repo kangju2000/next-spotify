@@ -2,8 +2,8 @@ import styled from '@emotion/styled';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
 import { getCategoryPlaylists } from 'api/browse';
-import Playlist from 'components/common/Playlist/Playlist';
-import TargetDiv from 'components/common/TargetDiv/TargetDiv';
+import Playlist from 'components/common/Playlist';
+import TargetDiv from 'components/common/TargetDiv';
 import { useGetCategoryPlaylists } from 'hooks/queries/browse';
 
 interface CategoryPageProps {

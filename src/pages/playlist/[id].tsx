@@ -5,7 +5,7 @@ import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import { getPlaylistTracks } from 'api/browse';
 import PlaylistTrack from 'components/common/PlaylistTrack';
-import TargetDiv from 'components/common/TargetDiv/TargetDiv';
+import TargetDiv from 'components/common/TargetDiv';
 import { useGetPlaylist, useGetPlaylistTracks } from 'hooks/queries/browse';
 
 interface PlaylistPageProps {

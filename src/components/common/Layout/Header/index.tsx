@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import Clock from 'components/common/Clock/Clock';
+import Clock from 'components/common/Clock';
 import SearchInput from './SearchInput';
 import User from './User';
 

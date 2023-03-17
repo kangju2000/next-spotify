@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import Artist from 'components/common/Artist/Artist';
+import Artist from 'components/common/Artist';
 import PlaylistTrack from 'components/common/PlaylistTrack';
 import { useGetSearchAll } from 'hooks/queries/search';
 import { searchQueryState } from 'recoil/atoms';

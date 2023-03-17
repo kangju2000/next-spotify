@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { RotatingLines } from 'react-loader-spinner';
+import { Loader } from '@mantine/core';
 import useIntersect from 'hooks/useIntersect';
 
 interface TargetDivProps {
@@ -36,13 +36,7 @@ const TargetDiv = ({ fetchNextPage, isFetchingNextPage, hasNextPage }: TargetDiv
             z-index: 999;
           `}
         >
-          <RotatingLines
-            strokeColor="white"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="48"
-            visible={true}
-          />
+          <Loader color="gray" />
         </div>
       )}
     </>

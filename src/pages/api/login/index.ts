@@ -5,7 +5,8 @@ import generateRandomString from 'utils/generateRandomString';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const state = generateRandomString(16);
-  const scope = 'user-read-private user-read-email';
+  const scope =
+    'user-read-private user-read-email user-read-playback-state user-modify-playback-state';
 
   res.redirect(
     'https://accounts.spotify.com/authorize?' +

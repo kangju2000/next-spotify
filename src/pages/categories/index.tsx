@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import Category from 'components/common/Category/Category';
-import TargetDiv from 'components/common/TargetDiv/TargetDiv';
+import TargetDiv from 'components/common/TargetDiv';
 import { useGetCategories } from 'hooks/queries/browse';
 
 const CategoriesPage = () => {

@@ -1,7 +1,7 @@
-import { ThreeDots } from 'react-loader-spinner';
-import Track from 'components/common/Track/Track';
+import styled from '@emotion/styled';
+import { Loader } from '@mantine/core';
+import Track from 'components/common/Track';
 import { useGetRecommendations } from 'hooks/queries/browse';
-import * as S from './RecommendTracks.styles';
 
 const RecommendTracks = () => {
   const { data: recommendationsData, isLoading } = useGetRecommendations({
@@ -14,20 +14,30 @@ const RecommendTracks = () => {
       <S.Title>추천 노래</S.Title>
       <S.Tracks>
         {isLoading ? (
-          <ThreeDots
-            height="80"
-            width="80"
-            radius="9"
-            color="#4fa94d"
-            ariaLabel="three-dots-loading"
-            visible={true}
-          />
+          <Loader color="gray" size="lg" />
         ) : (
           recommendationsData?.data.tracks.map((track) => <Track key={track.id} track={track} />)
         )}
       </S.Tracks>
     </S.Container>
   );
+};
+
+const S = {
+  Container: styled.div`
+    min-height: 400px;
+    margin-bottom: 20px;
+  `,
+  Title: styled.h1`
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  `,
+  Tracks: styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  `,
 };
 
 export default RecommendTracks;

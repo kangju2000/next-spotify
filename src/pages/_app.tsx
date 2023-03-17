@@ -10,15 +10,16 @@ import { useState } from 'react';
 import { RecoilRoot } from 'recoil';
 import type { MutableSnapshot } from 'recoil';
 import Layout from 'components/common/Layout';
-import { loginDataState } from 'recoil/atoms';
+import { loginDataState, playbackDataState } from 'recoil/atoms';
 import GlobalStyle from 'styles/GlobalStyle';
 import theme from 'styles/theme';
 
 interface MyAppProps extends AppProps {
-  loginData: SpotifyApi.UserProfileResponse | null;
+  loginData?: SpotifyApi.UserProfileResponse;
+  playbackData?: SpotifyApi.CurrentPlaybackResponse;
 }
 
-function App({ Component, pageProps, loginData }: MyAppProps) {
+function App({ Component, pageProps, loginData, playbackData }: MyAppProps) {
   const [queryClient] = useState(() => new QueryClient());
 
   queryClient.setDefaultOptions({
@@ -31,7 +32,8 @@ function App({ Component, pageProps, loginData }: MyAppProps) {
   });
 
   const initializer = ({ set }: MutableSnapshot) => {
-    set(loginDataState, loginData);
+    if (loginData) set(loginDataState, loginData);
+    if (playbackData) set(playbackDataState, playbackData);
   };
 
   return (
@@ -62,24 +64,40 @@ function App({ Component, pageProps, loginData }: MyAppProps) {
 App.getInitialProps = async (context: AppContext) => {
   const { ctx, Component } = context;
   let pageProps = {};
+  let loginData: SpotifyApi.UserProfileResponse | null;
+  let playbackData: SpotifyApi.CurrentPlaybackResponse | null;
 
   const accessToken = getCookie('access_token', ctx);
 
-  const { data: loginData } = await axios<SpotifyApi.UserProfileResponse>({
-    method: 'get',
-    url: 'https://api.spotify.com/v1/me',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  }).catch(() => {
-    return { data: null };
-  });
+  try {
+    const loginDataResponse = await axios<SpotifyApi.UserProfileResponse>({
+      method: 'get',
+      url: 'https://api.spotify.com/v1/me',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const PlaybackDataResponse = await axios<SpotifyApi.CurrentPlaybackResponse>({
+      method: 'get',
+      url: 'https://api.spotify.com/v1/me/player',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    loginData = loginDataResponse.data;
+    playbackData = PlaybackDataResponse.data;
+  } catch {
+    loginData = null;
+    playbackData = null;
+  }
 
   if (Component.getInitialProps) {
     pageProps = await Component.getInitialProps(ctx);
   }
 
-  return { pageProps, loginData };
+  return { pageProps, loginData, playbackData };
 };
 
 export default App;
