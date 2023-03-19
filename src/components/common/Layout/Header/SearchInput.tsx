@@ -36,7 +36,8 @@ const S = {
   Container: styled.div`
     display: flex;
     align-items: center;
-    width: 400px;
+    flex-grow: 1;
+    max-width: 400px;
     height: 50px;
     padding: 15px;
     border-radius: 10px;

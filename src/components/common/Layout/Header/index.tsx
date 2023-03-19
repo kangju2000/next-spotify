@@ -20,12 +20,14 @@ const S = {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    min-width: 600px;
     height: 100px;
     margin-bottom: 20px;
   `,
   Wrapper: styled.div`
     display: flex;
+    align-items: center;
+    width: 50%;
+    min-width: 350px;
 
     > :first-child {
       margin-right: 20px;

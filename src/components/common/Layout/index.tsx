@@ -29,15 +29,15 @@ const S = {
   Container: styled.div`
     display: flex;
     width: 100%;
+    min-width: 650px;
     min-height: 100vh;
     padding-left: 100px;
     background: linear-gradient(#222222, #121212);
     color: ${({ theme }) => theme.colors.white};
-    overflow: hidden;
   `,
   Content: styled.div`
     width: 100%;
-    padding: 0 30px;
+    padding: 0 30px 100px;
   `,
 };
 

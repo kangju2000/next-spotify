@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Loader } from '@mantine/core';
 import { useRouter } from 'next/router';
-import Category from 'components/common/Category/Category';
+import Category from 'components/common/Category';
 import ROUTES from 'constants/routes';
 import { useGetCategories } from 'hooks/queries/browse';
 

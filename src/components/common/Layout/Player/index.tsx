@@ -8,9 +8,8 @@ const Player = () => {
   const playbackData = useRecoilValue(playbackDataState);
   console.log(playbackData);
 
-  if (!playbackData) return null;
-
-  if (!playbackData.item) return <S.Container>재생 중인 노래가 없습니다.</S.Container>;
+  if (!playbackData || !playbackData?.item)
+    return <S.Container>재생 중인 노래가 없습니다.</S.Container>;
 
   return (
     <S.Container>
