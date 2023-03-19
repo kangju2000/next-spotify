@@ -2,18 +2,21 @@ import { Avatar, Button, Menu } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { deleteCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import ROUTES from 'constants/routes';
-import { loginDataState } from 'recoil/atoms';
+import { loginDataState, playbackDataState } from 'recoil/atoms';
 
 const User = () => {
   const router = useRouter();
   const [loginData, setLoginData] = useRecoilState(loginDataState);
+  const setPlaybackData = useSetRecoilState(playbackDataState);
 
   const handleLogout = () => {
     setLoginData(null);
     deleteCookie('access_token');
     deleteCookie('refresh_token');
+    setLoginData(null);
+    setPlaybackData(null);
     router.push(ROUTES.HOME);
     notifications.show({
       title: '로그아웃 되었습니다.',

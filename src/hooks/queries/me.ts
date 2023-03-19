@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import type { UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError, AxiosResponse } from 'axios';
-import { getUser } from 'api/me';
+import { getPlaybackQueue, getUser } from 'api/me';
 
 export const useGetUser = (
   options?: UseQueryOptions<AxiosResponse<SpotifyApi.UserProfileResponse>, AxiosError>
@@ -10,3 +10,5 @@ export const useGetUser = (
     staleTime: Infinity,
     ...options,
   });
+
+export const useGetPlaybackQueue = () => useQuery(['queue'], () => getPlaybackQueue(), {});

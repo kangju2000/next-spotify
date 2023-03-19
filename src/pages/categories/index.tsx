@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import Category from 'components/common/Category/Category';
+import Category from 'components/common/Category';
 import TargetDiv from 'components/common/TargetDiv';
 import { useGetCategories } from 'hooks/queries/browse';
 
