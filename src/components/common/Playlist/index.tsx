@@ -1,4 +1,6 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import ROUTES from 'constants/routes';
 
@@ -15,7 +17,15 @@ const Playlist = ({ playlist }: PlaylistProps) => {
 
   return (
     <S.Container>
-      <S.Thumbnail src={playlist.images[0].url} alt="플레이리스트 이미지" />
+      <Image
+        src={playlist.images[0].url}
+        alt="플레이리스트 이미지"
+        width={260}
+        height={260}
+        css={css`
+          border-radius: 5px;
+        `}
+      />
       <S.Info>
         <S.Name>{playlist.name}</S.Name>
         <S.Description
@@ -36,28 +46,20 @@ const S = {
     border-radius: 5px;
     background-color: ${({ theme }) => theme.colors.darkgray};
   `,
-
-  Thumbnail: styled.img`
-    border-radius: 5px;
-  `,
-
   Info: styled.div`
     position: relative;
     width: 100%;
     margin-left: 10px;
   `,
-
   Name: styled.h2`
     margin-bottom: 10px;
     font-size: 24px;
     font-weight: 700;
   `,
-
   Description: styled.p`
     line-height: 1.2;
     color: ${({ theme }) => theme.colors.lightgray};
   `,
-
   Button: styled.button`
     position: absolute;
     bottom: 0;
