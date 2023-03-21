@@ -12,7 +12,6 @@ interface CategoryPageProps {
 
 const CategoryPage = ({ id }: CategoryPageProps) => {
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useGetCategoryPlaylists(id);
-  console.log(data);
 
   return (
     <S.Container>

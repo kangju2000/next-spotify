@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { RecoilRoot } from 'recoil';
 import type { MutableSnapshot } from 'recoil';
 import Layout from 'components/common/Layout';
+import PageLoading from 'components/common/PageLoading';
 import { loginDataState, playbackDataState } from 'recoil/atoms';
 import GlobalStyle from 'styles/GlobalStyle';
 import theme from 'styles/theme';
@@ -51,6 +52,7 @@ function App({ Component, pageProps, loginData, playbackData }: MyAppProps) {
               <GlobalStyle />
               <Notifications position="bottom-center" />
               <Layout>
+                <PageLoading />
                 <Component {...pageProps} />
               </Layout>
             </ThemeProvider>
@@ -68,6 +70,11 @@ App.getInitialProps = async (context: AppContext) => {
   let playbackData: SpotifyApi.CurrentPlaybackResponse | null;
 
   const accessToken = getCookie('access_token', ctx);
+  const refreshToken = getCookie('refresh_token', ctx);
+
+  if (!refreshToken) {
+    return { pageProps, loginData: null, playbackData: null };
+  }
 
   try {
     const loginDataResponse = await axios<SpotifyApi.UserProfileResponse>({

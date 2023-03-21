@@ -1,22 +1,41 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import Artist from 'components/common/Artist';
 import PlaylistTrack from 'components/common/PlaylistTrack';
+import ROUTES from 'constants/routes';
 import { useGetSearchAll } from 'hooks/queries/search';
 import { searchQueryState } from 'recoil/atoms';
 
 const SearchPage = () => {
-  const query = useRecoilValue(searchQueryState);
+  const [query, setQuery] = useRecoilState(searchQueryState);
+  const router = useRouter();
+
   const [searchData, setSearchData] = useState<SpotifyApi.SearchResponse | null>(null);
 
-  const { data } = useGetSearchAll(query);
+  const { data, isFetching } = useGetSearchAll(query);
 
   useEffect(() => {
     if (data) setSearchData(data.data);
   }, [data]);
 
-  if (!searchData) return null;
+  if (!query)
+    return (
+      <S.Container>
+        <h2
+          css={css`
+            text-align: center;
+            font-size: 36px;
+          `}
+        >
+          찾고 싶은 음악 또는 가수를 검색하세요.
+        </h2>
+      </S.Container>
+    );
+
+  if (isFetching || !searchData) return null;
 
   if (!searchData.tracks?.items.length && !searchData.artists?.items.length)
     return (
@@ -29,7 +48,17 @@ const SearchPage = () => {
     <S.Container>
       <S.Wrapper>
         <h2>곡</h2>
-        <S.MoreButton>모두 보기</S.MoreButton>
+        <S.MoreButton
+          onClick={() => {
+            setQuery('');
+            router.push({
+              pathname: ROUTES.SEARCH_SONG,
+              query: { query },
+            });
+          }}
+        >
+          모두 보기
+        </S.MoreButton>
         <S.Tracks>
           {searchData?.tracks?.items.slice(0, 4).map((track) => (
             <PlaylistTrack key={track.id} track={track} />
@@ -38,7 +67,17 @@ const SearchPage = () => {
       </S.Wrapper>
       <S.Wrapper>
         <h2>아티스트</h2>
-        <S.MoreButton>모두 보기</S.MoreButton>
+        <S.MoreButton
+          onClick={() => {
+            setQuery('');
+            router.push({
+              pathname: ROUTES.SEARCH_ARTIST,
+              query: { query },
+            });
+          }}
+        >
+          모두 보기
+        </S.MoreButton>
         <S.Artists>
           {searchData?.artists?.items.map((artist) => (
             <Artist key={artist.id} artist={artist} />
