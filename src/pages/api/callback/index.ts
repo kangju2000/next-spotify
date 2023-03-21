@@ -18,7 +18,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       .then((response) => {
         res.setHeader('Set-Cookie', [
           `access_token=${response.data.access_token}; path=/; max-age=${response.data.expires_in}`,
-          `refresh_token=${response.data.refresh_token}; path=/; max-age=${response.data.expires_in}`,
+          `refresh_token=${response.data.refresh_token}; path=/; max-age=${response.data.expires_in}; HttpOnly`,
         ]);
 
         res.redirect('/');

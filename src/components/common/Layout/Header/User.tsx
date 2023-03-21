@@ -1,9 +1,8 @@
 import { Avatar, Button, Menu } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { deleteCookie } from 'cookies-next';
+import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import ROUTES from 'constants/routes';
 import { loginDataState, playbackDataState } from 'recoil/atoms';
 
 const User = () => {
@@ -13,11 +12,9 @@ const User = () => {
 
   const handleLogout = () => {
     setLoginData(null);
-    deleteCookie('access_token');
-    deleteCookie('refresh_token');
+    axios.post('/api/logout');
     setLoginData(null);
     setPlaybackData(null);
-    router.push(ROUTES.HOME);
     notifications.show({
       title: '로그아웃 되었습니다.',
       message: '다음에 또 봐요!',
@@ -54,7 +51,6 @@ const User = () => {
           <br />
           {loginData.display_name} 님!
         </Menu.Label>
-        <Menu.Item onClick={handleLogout}>내 정보</Menu.Item>
         <Menu.Item onClick={handleLogout}>로그아웃</Menu.Item>
       </Menu.Dropdown>
     </Menu>
