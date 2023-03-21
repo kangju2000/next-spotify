@@ -17,7 +17,6 @@ const PlaylistPage = ({ id }: PlaylistPageProps) => {
   const { data: playlistData } = useGetPlaylist(id);
 
   let playlistNumber = 1;
-  console.log(playlistData?.data);
 
   return (
     <S.Container>

@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import axios from 'axios';
 import { getCookie } from 'cookies-next';
 import { AppProps, AppContext } from 'next/app';
+import Head from 'next/head';
 import { useState } from 'react';
 import { RecoilRoot } from 'recoil';
 import type { MutableSnapshot } from 'recoil';
@@ -38,28 +39,35 @@ function App({ Component, pageProps, loginData, playbackData }: MyAppProps) {
   };
 
   return (
-    <RecoilRoot initializeState={initializer}>
-      <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={true} />
-        <Hydrate state={pageProps.dehydratedState}>
-          <MantineProvider
-            withNormalizeCSS
-            theme={{
-              fontFamily: 'Noto Sans KR',
-            }}
-          >
-            <ThemeProvider theme={theme}>
-              <GlobalStyle />
-              <Notifications position="bottom-center" />
-              <Layout>
-                <PageLoading />
-                <Component {...pageProps} />
-              </Layout>
-            </ThemeProvider>
-          </MantineProvider>
-        </Hydrate>
-      </QueryClientProvider>
-    </RecoilRoot>
+    <>
+      <Head>
+        <title>음악 검색</title>
+        <meta name="description" content="음악 검색" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+      <RecoilRoot initializeState={initializer}>
+        <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools initialIsOpen={true} />
+          <Hydrate state={pageProps.dehydratedState}>
+            <MantineProvider
+              withNormalizeCSS
+              theme={{
+                fontFamily: 'Noto Sans KR',
+              }}
+            >
+              <ThemeProvider theme={theme}>
+                <GlobalStyle />
+                <Notifications position="bottom-center" />
+                <Layout>
+                  <PageLoading />
+                  <Component {...pageProps} />
+                </Layout>
+              </ThemeProvider>
+            </MantineProvider>
+          </Hydrate>
+        </QueryClientProvider>
+      </RecoilRoot>
+    </>
   );
 }
 
