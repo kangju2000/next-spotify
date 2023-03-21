@@ -1,34 +1,49 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next-Spotify
 
-## Getting Started
+## 배포 링크
 
-First, run the development server:
+[바로가기](https://search-music.vercel.app/)
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## 소개
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Spotify API로 구현한 개인 프로젝트입니다. Next.js와 React-Query에 익숙해지려는 목적으로 만들었습니다.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## 기능
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+### 🔎음악 검색
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+![](https://user-images.githubusercontent.com/23312485/226597399-5cfadf02-0563-4a08-a2be-8c667236fc7a.gif)
+디바운싱을 사용하여 사용자가 입력한지 0.7초가 넘어가면 검색 api를 호출하도록 설정했습니다.
 
-## Learn More
+### 로그인 기능
+.
+### 음악 재생
+.
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 기술 스택
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- React
+- TypeScript
+- Next.js
+- Recoil
+- React-Query(Tanstack Query)
+- emotion
+- mantine UI
 
-## Deploy on Vercel
+## 고민한 점
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 토큰 관리 방법
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Spotify에서는 OAuth 2.0으로 사용자 인증을 하고 있습니다.
+
+Spotify API를 사용하려면 필수로 `access_token`이 필요하기 때문에, [`Client Credentials Grant`](https://developer.spotify.com/documentation/general/guides/authorization/client-credentials/) 방식으로 토큰을 가져왔습니다. 음악 재생같은 권한이 필요한 상황에는 [`Authorization Code Grant`](https://developer.spotify.com/documentation/general/guides/authorization/code-flow/) 방식으로 가져온 토큰으로만 접근이 가능합니다.
+
+### 검색어를 입력할 때마다 요청을 보내는 비효율적인 문제 해결
+.
+
+### 페이지 이동 시에 로딩 fallback을 띄우고 싶은데 Suspense가 동작하지 않음
+.
+
+### SSR에서의 React-query를 사용 방법
+.
