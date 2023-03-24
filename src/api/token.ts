@@ -7,18 +7,19 @@ interface TokenObject {
   expires_in: number;
 }
 
-interface AuthorizationTokenResponse extends TokenObject {}
+interface ClientCredentialsTokenResponse extends TokenObject {}
 
-interface AccessTokenResponse extends TokenObject {
+interface AuthorizationCodeTokenResponse extends TokenObject {
   refresh_token: string;
   scope: string;
 }
+
 interface RefreshTokenResponse extends TokenObject {
   scope: string;
 }
 
-export const postAuthorizationToken = () => {
-  return axios<AuthorizationTokenResponse>({
+export const postClientCredentialsToken = () => {
+  return axios<ClientCredentialsTokenResponse>({
     method: 'post',
     url: 'https://accounts.spotify.com/api/token',
     headers: {
@@ -35,8 +36,8 @@ export const postAuthorizationToken = () => {
   });
 };
 
-export const postAccessToken = (code: string) => {
-  return axios<AccessTokenResponse>({
+export const postAuthorizationCodeToken = (code: string) => {
+  return axios<AuthorizationCodeTokenResponse>({
     method: 'post',
     url: 'https://accounts.spotify.com/api/token',
     headers: {
