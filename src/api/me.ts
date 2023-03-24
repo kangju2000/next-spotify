@@ -52,3 +52,13 @@ export const postPlaybackPrevious = () => {
     url: `https://api.spotify.com/v1/me/player/previous`,
   });
 };
+
+export const postPlaybackQueue = ({ uri }: { uri: string }) => {
+  return api({
+    method: 'post',
+    url: `https://api.spotify.com/v1/me/player/queue`,
+    params: {
+      uri,
+    },
+  });
+};

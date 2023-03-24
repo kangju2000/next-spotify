@@ -1,12 +1,24 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
+import { useRecoilValue } from 'recoil';
+import { usePostPlaybackQueue } from 'hooks/mutations/me';
+import { loginDataState } from 'recoil/atoms';
 
 interface PlaylistTrackProps {
   track: SpotifyApi.TrackObjectFull;
 }
 
 const PlaylistTrack = ({ track }: PlaylistTrackProps) => {
+  const loginData = useRecoilValue(loginDataState);
+  const { mutate } = usePostPlaybackQueue();
+
+  const handlePlay = () => {
+    if (!loginData) return alert('로그인이 필요합니다.');
+
+    mutate({ uri: track.uri });
+  };
+
   return (
     <S.Container>
       <div
@@ -32,7 +44,7 @@ const PlaylistTrack = ({ track }: PlaylistTrackProps) => {
         </div>
       </div>
       <S.Album>{track.album.name}</S.Album>
-      <Image src="/images/play.svg" alt="artist" width={24} height={24} />
+      <Image src="/images/play.svg" alt="artist" width={24} height={24} onClick={handlePlay} />
     </S.Container>
   );
 };

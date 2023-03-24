@@ -4,7 +4,7 @@ const nextConfig = {
   swcMinify: true,
   pageExtensions: ['styles.ts', 'ts', 'tsx', 'js', 'jsx'],
   images: {
-    domains: ['i.scdn.co', 't.scdn.co'],
+    domains: ['i.scdn.co', 't.scdn.co', 'charts-images.scdn.co'],
   },
 };
 
