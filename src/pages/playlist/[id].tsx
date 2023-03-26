@@ -22,15 +22,15 @@ const PlaylistPage = ({ id }: PlaylistPageProps) => {
     <S.Container>
       <S.Playlist>
         <Image
-          src={playlistData?.data.images[0].url ?? ''}
-          alt={playlistData?.data.name ?? '플레이리스트 이미지'}
+          src={playlistData?.images[0].url ?? ''}
+          alt={playlistData?.name ?? '플레이리스트 이미지'}
           width={300}
           height={300}
           css={css`
             border-radius: 5px;
           `}
         />
-        <S.Description>{playlistData?.data.description}</S.Description>
+        <S.Description>{playlistData?.description}</S.Description>
       </S.Playlist>
       <S.Tracks>
         {data?.pages.map((page) =>

@@ -19,11 +19,13 @@ export const getCategories = async ({ pageParam = 0 }) => {
   return { data, pageParam };
 };
 
-export const getCategory = (id: string) => {
-  return api({
+export const getCategory = async (id: string) => {
+  const { data } = await api<SpotifyApi.SingleCategoryResponse>({
     method: 'get',
     url: `https://api.spotify.com/v1/browse/categories/${id}`,
   });
+
+  return data;
 };
 
 export const getCategoryPlaylists = async ({
@@ -44,11 +46,13 @@ export const getCategoryPlaylists = async ({
   return { data, pageParam };
 };
 
-export const getPlaylist = (id: string) => {
-  return api<SpotifyApi.SinglePlaylistResponse>({
+export const getPlaylist = async (id: string) => {
+  const { data } = await api<SpotifyApi.SinglePlaylistResponse>({
     method: 'get',
     url: `https://api.spotify.com/v1/playlists/${id}`,
   });
+
+  return data;
 };
 
 export const getPlaylistTracks = async ({ pageParam, id }: { pageParam: number; id: string }) => {
