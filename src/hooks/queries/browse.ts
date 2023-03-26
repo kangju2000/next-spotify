@@ -56,7 +56,12 @@ export const useGetCategoryPlaylists = (id: string) =>
 export const useGetPlaylist = (
   id: string,
   options?: UseQueryOptions<SpotifyApi.SinglePlaylistResponse, AxiosError>
-) => useQuery(['playlist', id], () => getPlaylist(id), options);
+) =>
+  useQuery<SpotifyApi.SinglePlaylistResponse, AxiosError>(
+    ['playlist', id],
+    () => getPlaylist(id),
+    options
+  );
 
 export const useGetPlaylistTracks = (id: string) =>
   useInfiniteQuery(

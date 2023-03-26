@@ -1,51 +1,105 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import {
-  getPlaybackState,
-  postPlaybackNext,
-  postPlaybackPrevious,
-  putPlaybackPause,
-  putPlaybackPlay,
-} from 'api/me';
-import { playbackDataState } from 'recoil/atoms';
+import api from 'api/api';
+import { postPlaybackNext, postPlaybackPrevious, putPlaybackPause, putPlaybackPlay } from 'api/me';
+import { getToken } from 'utils/TokenManager';
 import ProgressBar from './ProgressBar';
 
 const Player = () => {
-  const [playbackData, setPlaybackData] = useRecoilState(playbackDataState);
-  const [isPlaying, setIsPlaying] = useState(playbackData?.is_playing ?? false);
+  const [is_paused, setPaused] = useState(false);
+  const [player, setPlayer] = useState<Spotify.Player | null>(null);
+  const [current_track, setTrack] = useState<Spotify.Track | null>(null);
+  const [is_active, setActive] = useState(false);
+  const [duration, setDuration] = useState(0);
+  const [position, setPosition] = useState(0);
 
   useEffect(() => {
-    if (!playbackData || !isPlaying) return;
+    const script = document.createElement('script');
+    script.src = 'https://sdk.scdn.co/spotify-player.js';
+    script.async = true;
+
+    document.body.appendChild(script);
+
+    window.onSpotifyWebPlaybackSDKReady = () => {
+      const player = new window.Spotify.Player({
+        name: 'Web Playback SDK',
+        getOAuthToken: (cb) => {
+          cb(getToken());
+        },
+        volume: 0.5,
+      });
+
+      setPlayer(player);
+
+      player.addListener('ready', ({ device_id }) => {
+        console.log('Ready with Device ID', device_id);
+
+        api.put('https://api.spotify.com/v1/me/player', {
+          device_ids: [device_id],
+          play: false,
+        });
+      });
+
+      player.addListener('not_ready', ({ device_id }) => {
+        console.log('Device ID has gone offline', device_id);
+      });
+
+      player.addListener('player_state_changed', (state) => {
+        if (!state) {
+          return;
+        }
+
+        setTrack(state.track_window.current_track);
+        setPaused(state.paused);
+        setPosition(state.position);
+        setDuration(state.duration);
+
+        player.getCurrentState().then((state) => {
+          !state ? setActive(false) : setActive(true);
+        });
+      });
+
+      player.connect().then((success) => {
+        if (success) {
+          console.log('The Web Playback SDK successfully connected to Spotify!');
+        } else {
+          console.log(
+            'The Web Playback SDK failed to connect to Spotify. Make sure the SDK has been loaded.'
+          );
+        }
+      });
+    };
+  }, []);
+
+  useEffect(() => {
+    if (is_paused) {
+      return;
+    }
 
     const interval = setInterval(() => {
-      getPlaybackState().then((res) => {
-        if (res.data) {
-          setPlaybackData(res.data);
-          setIsPlaying(res.data.is_playing);
+      player?.getCurrentState().then((state) => {
+        if (!state) {
+          return;
         }
+
+        setPosition(state.position);
       });
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [setPlaybackData, playbackData, isPlaying]);
+  }, [is_paused, player]);
 
-  if (!playbackData || !playbackData?.item)
-    return <S.Container>재생 중인 노래가 없습니다.</S.Container>;
+  if (!is_active || !current_track) return <S.Container>재생 중인 노래가 없습니다.</S.Container>;
 
   return (
     <S.Container>
       <S.Track.Wrapper>
-        {'artists' in playbackData.item && (
-          <>
-            <Image src={playbackData.item.album.images[0].url} alt="album" width={64} height={64} />
-            <div>
-              <S.Track.Name>{playbackData.item.name}</S.Track.Name>
-              <S.Track.Artist>{playbackData.item.artists[0].name}</S.Track.Artist>
-            </div>
-          </>
-        )}
+        <Image src={current_track.album.images[0].url} alt="album" width={64} height={64} />
+        <div>
+          <S.Track.Name>{current_track.name}</S.Track.Name>
+          <S.Track.Artist>{current_track.artists[0].name}</S.Track.Artist>
+        </div>
       </S.Track.Wrapper>
       <S.Controls>
         <S.Playback>
@@ -56,27 +110,26 @@ const Player = () => {
             height={36}
             onClick={() => postPlaybackPrevious()}
           />
-          {isPlaying ? (
-            <Image
-              src="/images/pause_circle.svg"
-              alt="pause"
-              width={36}
-              height={36}
-              onClick={() => putPlaybackPause()}
-            />
-          ) : (
+          {is_paused ? (
             <Image
               src="/images/play_circle.svg"
               alt="play"
               width={36}
               height={36}
               onClick={() => {
-                setIsPlaying(true);
                 putPlaybackPlay({
-                  context_uri: playbackData.context?.uri,
-                  position_ms: playbackData.progress_ms as number,
+                  context_uri: current_track.uri,
+                  position_ms: position,
                 });
               }}
+            />
+          ) : (
+            <Image
+              src="/images/pause_circle.svg"
+              alt="pause"
+              width={36}
+              height={36}
+              onClick={() => putPlaybackPause()}
             />
           )}
           <Image
@@ -87,10 +140,7 @@ const Player = () => {
             onClick={() => postPlaybackNext()}
           />
         </S.Playback>
-        <ProgressBar
-          progressTime={playbackData.progress_ms}
-          durationTime={playbackData.item.duration_ms}
-        />
+        <ProgressBar position={position} duration={duration} />
       </S.Controls>
       <S.Options></S.Options>
     </S.Container>
