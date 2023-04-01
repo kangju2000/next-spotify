@@ -7,21 +7,19 @@ import axios from 'axios';
 import { getCookie } from 'cookies-next';
 import { AppProps, AppContext } from 'next/app';
 import Head from 'next/head';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { RecoilRoot } from 'recoil';
 import type { MutableSnapshot } from 'recoil';
 import Layout from 'components/common/Layout';
-import PageLoading from 'components/common/PageLoading';
-import { loginDataState, playbackDataState } from 'recoil/atoms';
+import { loginDataState } from 'recoil/atoms';
 import GlobalStyle from 'styles/GlobalStyle';
 import theme from 'styles/theme';
 
 interface MyAppProps extends AppProps {
   loginData?: SpotifyApi.UserProfileResponse;
-  playbackData?: SpotifyApi.CurrentPlaybackResponse;
 }
 
-function App({ Component, pageProps, loginData, playbackData }: MyAppProps) {
+function App({ Component, pageProps, loginData }: MyAppProps) {
   const [queryClient] = useState(() => new QueryClient());
 
   queryClient.setDefaultOptions({
@@ -35,7 +33,6 @@ function App({ Component, pageProps, loginData, playbackData }: MyAppProps) {
 
   const initializer = ({ set }: MutableSnapshot) => {
     if (loginData) set(loginDataState, loginData);
-    if (playbackData) set(playbackDataState, playbackData);
   };
 
   return (
@@ -59,8 +56,10 @@ function App({ Component, pageProps, loginData, playbackData }: MyAppProps) {
                 <GlobalStyle />
                 <Notifications position="bottom-center" />
                 <Layout>
-                  <PageLoading />
-                  <Component {...pageProps} />
+                  {/* <PageLoading /> */}
+                  <Suspense fallback={<div>로딩중</div>}>
+                    <Component {...pageProps} />
+                  </Suspense>
                 </Layout>
               </ThemeProvider>
             </MantineProvider>
@@ -75,13 +74,12 @@ App.getInitialProps = async (context: AppContext) => {
   const { ctx, Component } = context;
   let pageProps = {};
   let loginData: SpotifyApi.UserProfileResponse | null;
-  let playbackData: SpotifyApi.CurrentPlaybackResponse | null;
 
   const accessToken = getCookie('access_token', ctx);
   const refreshToken = getCookie('refresh_token', ctx);
 
   if (!refreshToken) {
-    return { pageProps, loginData: null, playbackData: null };
+    return { pageProps, loginData: null };
   }
 
   try {
@@ -93,26 +91,16 @@ App.getInitialProps = async (context: AppContext) => {
       },
     });
 
-    const PlaybackDataResponse = await axios<SpotifyApi.CurrentPlaybackResponse>({
-      method: 'get',
-      url: 'https://api.spotify.com/v1/me/player',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
     loginData = loginDataResponse.data;
-    playbackData = PlaybackDataResponse.data;
   } catch {
     loginData = null;
-    playbackData = null;
   }
 
   if (Component.getInitialProps) {
     pageProps = await Component.getInitialProps(ctx);
   }
 
-  return { pageProps, loginData, playbackData };
+  return { pageProps, loginData };
 };
 
 export default App;

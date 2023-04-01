@@ -3,18 +3,16 @@ import { notifications } from '@mantine/notifications';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { loginDataState, playbackDataState } from 'recoil/atoms';
+import { loginDataState } from 'recoil/atoms';
 
 const User = () => {
   const router = useRouter();
   const [loginData, setLoginData] = useRecoilState(loginDataState);
-  const setPlaybackData = useSetRecoilState(playbackDataState);
 
   const handleLogout = () => {
     setLoginData(null);
     axios.post('/api/logout');
     setLoginData(null);
-    setPlaybackData(null);
     notifications.show({
       title: '로그아웃 되었습니다.',
       message: '다음에 또 봐요!',
