@@ -5,6 +5,7 @@ import { searchQueryState } from 'recoil/atoms';
 import Header from './Header';
 import Player from './Player';
 import Sidebar from './Sidebar';
+import { isMobile } from 'react-device-detect';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -15,12 +16,12 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <S.Container>
-      <Sidebar />
-      <Player />
+      {!isMobile && <Sidebar />}
       <S.Content>
         <Header />
         {searchQuery ? <SearchPage /> : children}
       </S.Content>
+      <Player />
     </S.Container>
   );
 };
@@ -29,9 +30,7 @@ const S = {
   Container: styled.div`
     display: flex;
     width: 100%;
-    min-width: 650px;
     min-height: 100vh;
-    padding-left: 100px;
     background: linear-gradient(#222222, #121212);
     color: ${({ theme }) => theme.colors.white};
   `,
