@@ -2,7 +2,7 @@ import { Avatar, Button, Menu } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { loginDataState } from 'recoil/atoms';
 
 const User = () => {

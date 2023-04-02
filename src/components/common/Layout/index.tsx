@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
+import { isMobile } from 'react-device-detect';
 import { useRecoilValue } from 'recoil';
 import SearchPage from 'pages/search';
 import { searchQueryState } from 'recoil/atoms';
 import Header from './Header';
 import Player from './Player';
 import Sidebar from './Sidebar';
-import { isMobile } from 'react-device-detect';
 
 interface LayoutProps {
   children: React.ReactNode;

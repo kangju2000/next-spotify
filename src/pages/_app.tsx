@@ -56,7 +56,6 @@ function App({ Component, pageProps, loginData }: MyAppProps) {
                 <GlobalStyle />
                 <Notifications position="bottom-center" />
                 <Layout>
-                  {/* <PageLoading /> */}
                   <Suspense fallback={<div>로딩중</div>}>
                     <Component {...pageProps} />
                   </Suspense>

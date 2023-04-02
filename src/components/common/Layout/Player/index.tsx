@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import api from 'api/api';
-import { postPlaybackNext, postPlaybackPrevious, putPlaybackPause, putPlaybackPlay } from 'api/me';
 import { getToken } from 'utils/TokenManager';
 import ProgressBar from './ProgressBar';
 
@@ -63,10 +62,6 @@ const Player = () => {
       player.connect().then((success) => {
         if (success) {
           console.log('The Web Playback SDK successfully connected to Spotify!');
-        } else {
-          console.log(
-            'The Web Playback SDK failed to connect to Spotify. Make sure the SDK has been loaded.'
-          );
         }
       });
     };
@@ -78,19 +73,14 @@ const Player = () => {
     }
 
     const interval = setInterval(() => {
-      player?.getCurrentState().then((state) => {
-        if (!state) {
-          return;
-        }
-
-        setPosition(state.position);
-      });
-    }, 1000);
+      setPosition((prev) => prev + 100);
+    }, 100);
 
     return () => clearInterval(interval);
-  }, [is_paused, player]);
+  }, [is_paused]);
 
-  if (!is_active || !current_track) return <S.Container>재생 중인 노래가 없습니다.</S.Container>;
+  if (!is_active || !current_track || !player)
+    return <S.Container>재생 중인 노래가 없습니다.</S.Container>;
 
   return (
     <S.Container>
@@ -108,36 +98,27 @@ const Player = () => {
             alt="previous"
             width={36}
             height={36}
-            onClick={() => postPlaybackPrevious()}
+            onClick={() => {
+              player.previousTrack();
+              setPosition(0);
+            }}
           />
-          {is_paused ? (
-            <Image
-              src="/images/play_circle.svg"
-              alt="play"
-              width={36}
-              height={36}
-              onClick={() => {
-                putPlaybackPlay({
-                  context_uri: current_track.uri,
-                  position_ms: position,
-                });
-              }}
-            />
-          ) : (
-            <Image
-              src="/images/pause_circle.svg"
-              alt="pause"
-              width={36}
-              height={36}
-              onClick={() => putPlaybackPause()}
-            />
-          )}
+          <Image
+            src={`/images/${is_paused ? 'play' : 'pause'}_circle.svg`}
+            alt={is_paused ? 'play' : 'pause'}
+            width={36}
+            height={36}
+            onClick={() => player.togglePlay()}
+          />
           <Image
             src="/images/next_song_arrow.svg"
             alt="next"
             width={36}
             height={36}
-            onClick={() => postPlaybackNext()}
+            onClick={() => {
+              player.nextTrack();
+              setPosition(0);
+            }}
           />
         </S.Playback>
         <ProgressBar position={position} duration={duration} />
