@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { isMobile } from 'react-device-detect';
 import ROUTES from 'constants/routes';
 
 interface CategoryProps {
@@ -20,8 +21,8 @@ const Category = ({ category }: CategoryProps) => {
       <Image
         src={category.icons[0].url}
         alt="카테고리 이미지"
-        width={160}
-        height={160}
+        width={isMobile ? 80 : 160}
+        height={isMobile ? 80 : 160}
         css={css`
           border-radius: 5px;
         `}

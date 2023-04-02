@@ -7,7 +7,7 @@ import axios from 'axios';
 import { getCookie } from 'cookies-next';
 import { AppProps, AppContext } from 'next/app';
 import Head from 'next/head';
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import { RecoilRoot } from 'recoil';
 import type { MutableSnapshot } from 'recoil';
 import Layout from 'components/common/Layout';
@@ -56,9 +56,7 @@ function App({ Component, pageProps, loginData }: MyAppProps) {
                 <GlobalStyle />
                 <Notifications position="bottom-center" />
                 <Layout>
-                  <Suspense fallback={<div>로딩중</div>}>
-                    <Component {...pageProps} />
-                  </Suspense>
+                  <Component {...pageProps} />
                 </Layout>
               </ThemeProvider>
             </MantineProvider>

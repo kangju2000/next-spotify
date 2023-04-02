@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import Artist from 'components/common/Artist';
 import PlaylistTrack from 'components/common/PlaylistTrack';
@@ -13,13 +12,7 @@ const SearchPage = () => {
   const [query, setQuery] = useRecoilState(searchQueryState);
   const router = useRouter();
 
-  const [searchData, setSearchData] = useState<SpotifyApi.SearchResponse | null>(null);
-
-  const { data, isFetching } = useGetSearchAll(query);
-
-  useEffect(() => {
-    if (data) setSearchData(data.data);
-  }, [data]);
+  const { data } = useGetSearchAll(query);
 
   if (!query)
     return (
@@ -35,9 +28,7 @@ const SearchPage = () => {
       </S.Container>
     );
 
-  if (isFetching || !searchData) return null;
-
-  if (!searchData.tracks?.items.length && !searchData.artists?.items.length)
+  if (!data?.data.tracks?.items.length && !data?.data.artists?.items.length)
     return (
       <S.Container>
         <h2>검색 결과가 없습니다.</h2>
@@ -60,7 +51,7 @@ const SearchPage = () => {
           모두 보기
         </S.MoreButton>
         <S.Tracks>
-          {searchData?.tracks?.items.slice(0, 4).map((track) => (
+          {data.data?.tracks?.items.slice(0, 4).map((track) => (
             <PlaylistTrack key={track.id} track={track} />
           ))}
         </S.Tracks>
@@ -79,7 +70,7 @@ const SearchPage = () => {
           모두 보기
         </S.MoreButton>
         <S.Artists>
-          {searchData?.artists?.items.map((artist) => (
+          {data.data?.artists?.items.map((artist) => (
             <Artist key={artist.id} artist={artist} />
           ))}
         </S.Artists>

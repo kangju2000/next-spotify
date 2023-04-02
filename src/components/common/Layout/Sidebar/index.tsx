@@ -40,6 +40,10 @@ const Sidebar = () => {
 
 const S = {
   Container: styled.nav`
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
     width: 100px;
     padding: 100px 0;
     background: ${({ theme }) => theme.colors.black};

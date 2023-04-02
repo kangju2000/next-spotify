@@ -1,12 +1,11 @@
 import styled from '@emotion/styled';
-import { Loader } from '@mantine/core';
 import { useRouter } from 'next/router';
 import Category from 'components/common/Category';
 import ROUTES from 'constants/routes';
 import { useGetCategories } from 'hooks/queries/browse';
 
 const Categories = () => {
-  const { data: categoriesData, isLoading } = useGetCategories();
+  const { data: categoriesData } = useGetCategories();
   const router = useRouter();
 
   const handleClick = () => {
@@ -18,13 +17,9 @@ const Categories = () => {
       <S.Title>카테고리</S.Title>
       <S.MoreButton onClick={handleClick}>모두 보기</S.MoreButton>
       <S.Categories>
-        {isLoading ? (
-          <Loader color="gray" size="lg" />
-        ) : (
-          categoriesData?.pages[0].data.categories.items
-            .slice(0, 8)
-            .map((category) => <Category key={category.id} category={category} />)
-        )}
+        {categoriesData?.pages[0].data.categories.items.slice(0, 8).map((category) => (
+          <Category key={category.id} category={category} />
+        ))}
       </S.Categories>
     </S.Container>
   );
