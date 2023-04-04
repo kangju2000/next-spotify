@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import api from 'api/api';
+import { loginDataState } from 'recoil/atoms';
 import { getToken } from 'utils/TokenManager';
 import ProgressBar from './ProgressBar';
 
@@ -13,7 +15,13 @@ const Player = () => {
   const [duration, setDuration] = useState(0);
   const [position, setPosition] = useState(0);
 
+  const loginData = useRecoilValue(loginDataState);
+
   useEffect(() => {
+    if (!loginData) {
+      return;
+    }
+
     const script = document.createElement('script');
     script.src = 'https://sdk.scdn.co/spotify-player.js';
     script.async = true;
@@ -79,6 +87,7 @@ const Player = () => {
     return () => clearInterval(interval);
   }, [is_paused]);
 
+  if (!loginData) return <S.Container>로그인 후 이용해주세요.</S.Container>;
   if (!is_active || !current_track || !player)
     return <S.Container>재생 중인 노래가 없습니다.</S.Container>;
 

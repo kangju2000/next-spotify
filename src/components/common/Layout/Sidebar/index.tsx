@@ -44,6 +44,7 @@ const S = {
     top: 0;
     left: 0;
     height: 100vh;
+    min-height: -webkit-fill-available;
     width: 100px;
     padding: 100px 0;
     background: ${({ theme }) => theme.colors.black};

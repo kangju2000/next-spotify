@@ -39,6 +39,7 @@ const S = {
     width: 100%;
     min-width: 700px;
     min-height: 100vh;
+    min-height: -webkit-fill-available;
     background: linear-gradient(#222222, #121212);
     color: ${({ theme }) => theme.colors.white};
   `,

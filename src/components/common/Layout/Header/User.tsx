@@ -10,12 +10,12 @@ const User = () => {
   const [loginData, setLoginData] = useRecoilState(loginDataState);
 
   const handleLogout = () => {
-    setLoginData(null);
-    axios.post('/api/logout');
-    setLoginData(null);
-    notifications.show({
-      title: '로그아웃 되었습니다.',
-      message: '다음에 또 봐요!',
+    axios.post('/api/logout').then(() => {
+      setLoginData(null);
+      notifications.show({
+        title: '로그아웃 되었습니다.',
+        message: '다음에 또 봐요!',
+      });
     });
   };
 
