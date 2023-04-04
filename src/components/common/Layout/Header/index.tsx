@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import Clock from 'components/common/Clock';
 import SearchInput from './SearchInput';
 import User from './User';
 
@@ -7,7 +6,6 @@ const Header = () => {
   return (
     <S.Container>
       <S.Wrapper>
-        <Clock />
         <SearchInput />
       </S.Wrapper>
       <User />
@@ -27,7 +25,7 @@ const S = {
     display: flex;
     align-items: center;
     width: 50%;
-    min-width: 350px;
+    min-width: 260px;
 
     > :first-child {
       margin-right: 20px;

@@ -20,13 +20,15 @@ const Layout = ({ children }: LayoutProps) => {
       {!isMobile && <Sidebar />}
       <S.Content>
         <Header />
-        {searchQuery ? (
-          <Suspense fallback={null}>
-            <SearchPage />
-          </Suspense>
-        ) : (
-          children
-        )}
+        <S.Wrapper>
+          {searchQuery ? (
+            <Suspense fallback={null}>
+              <SearchPage />
+            </Suspense>
+          ) : (
+            children
+          )}
+        </S.Wrapper>
       </S.Content>
       <Player />
     </S.Container>
@@ -37,7 +39,7 @@ const S = {
   Container: styled.div`
     display: flex;
     width: 100%;
-    min-width: 700px;
+    height: 100%;
     min-height: 100vh;
     min-height: -webkit-fill-available;
     background: linear-gradient(#222222, #121212);
@@ -45,9 +47,13 @@ const S = {
   `,
   Content: styled.div`
     flex-grow: 1;
+    min-height: 100vh;
     padding: 0 30px 100px;
     overflow: hidden;
     ${!isMobile && 'margin-left: 100px;'}
+  `,
+  Wrapper: styled.div`
+    width: 100%;
   `,
 };
 

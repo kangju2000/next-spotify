@@ -17,7 +17,7 @@ const Category = ({ category }: CategoryProps) => {
   };
 
   return (
-    <S.Container onClick={handleClick}>
+    <S.Container onClick={handleClick} isMobile={isMobile}>
       <Image
         src={category.icons[0].url}
         alt="카테고리 이미지"
@@ -27,25 +27,25 @@ const Category = ({ category }: CategoryProps) => {
           border-radius: 5px;
         `}
       />
-      <S.Name>{category.name}</S.Name>
+      <S.Name isMobile={isMobile}>{category.name}</S.Name>
     </S.Container>
   );
 };
 
 const S = {
-  Container: styled.div`
+  Container: styled.div<{ isMobile: boolean }>`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 200px;
-    padding: 20px;
+    width: ${({ isMobile }) => (isMobile ? '100px' : '200px')};
+    padding: ${({ isMobile }) => (isMobile ? '10px' : '20px')};
     background-color: ${({ theme }) => theme.colors.darkgray};
     border-radius: 5px;
     cursor: pointer;
   `,
-  Name: styled.h2`
+  Name: styled.h2<{ isMobile: boolean }>`
     margin-top: 10px;
-    font-size: 18px;
+    font-size: ${({ isMobile }) => (isMobile ? '12px' : '18px')};
     font-weight: 700;
   `,
 };
