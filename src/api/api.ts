@@ -49,6 +49,11 @@ api.interceptors.response.use(
   async (error) => {
     const { config, response } = error;
 
+    if (response?.status === 502 && !config._retry) {
+      config._retry = true;
+      return api(config);
+    }
+
     if (response?.status === 401 && !config._retry) {
       try {
         config._retry = true;

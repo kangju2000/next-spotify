@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -6,22 +7,19 @@ import api from 'api/api';
 import { loginDataState } from 'recoil/atoms';
 import { getToken } from 'utils/TokenManager';
 import ProgressBar from './ProgressBar';
+import VolumeBar from './VolumeBar';
 
 const Player = () => {
-  const [is_paused, setPaused] = useState(false);
+  const [is_paused, setPaused] = useState(true);
   const [player, setPlayer] = useState<Spotify.Player | null>(null);
   const [current_track, setTrack] = useState<Spotify.Track | null>(null);
-  const [is_active, setActive] = useState(false);
-  const [duration, setDuration] = useState(0);
   const [position, setPosition] = useState(0);
+  const [duration, setDuration] = useState(1);
+  const [volume, setVolume] = useState(0);
 
   const loginData = useRecoilValue(loginDataState);
 
   useEffect(() => {
-    if (!loginData) {
-      return;
-    }
-
     const script = document.createElement('script');
     script.src = 'https://sdk.scdn.co/spotify-player.js';
     script.async = true;
@@ -30,7 +28,7 @@ const Player = () => {
 
     window.onSpotifyWebPlaybackSDKReady = () => {
       const player = new window.Spotify.Player({
-        name: 'Web Playback SDK',
+        name: 'player',
         getOAuthToken: (cb) => {
           cb(getToken());
         },
@@ -44,7 +42,11 @@ const Player = () => {
 
         api.put('https://api.spotify.com/v1/me/player', {
           device_ids: [device_id],
-          play: false,
+        });
+
+        player.getVolume().then((volume) => {
+          console.log('Volume of device is', volume);
+          setVolume(volume);
         });
       });
 
@@ -61,10 +63,6 @@ const Player = () => {
         setPaused(state.paused);
         setPosition(state.position);
         setDuration(state.duration);
-
-        player.getCurrentState().then((state) => {
-          !state ? setActive(false) : setActive(true);
-        });
       });
 
       player.connect().then((success) => {
@@ -72,34 +70,42 @@ const Player = () => {
           console.log('The Web Playback SDK successfully connected to Spotify!');
         }
       });
+      player.addListener('initialization_error', ({ message }) => {
+        console.log(message);
+      });
+
+      player.addListener('authentication_error', ({ message }) => {
+        console.log(message);
+      });
+
+      player.addListener('account_error', ({ message }) => {
+        console.log(message);
+      });
     };
   }, [loginData]);
 
-  useEffect(() => {
-    if (is_paused) {
-      return;
-    }
-
-    const interval = setInterval(() => {
-      setPosition((prev) => prev + 100);
-    }, 100);
-
-    return () => clearInterval(interval);
-  }, [is_paused]);
-
-  if (!loginData) return <S.Container>로그인 후 이용해주세요.</S.Container>;
-  if (!is_active || !current_track || !player)
-    return <S.Container>재생 중인 노래가 없습니다.</S.Container>;
-
   return (
     <S.Container>
-      <S.Track.Wrapper>
-        <Image src={current_track.album.images[0].url} alt="album" width={64} height={64} />
-        <div>
-          <S.Track.Name>{current_track.name}</S.Track.Name>
-          <S.Track.Artist>{current_track.artists[0].name}</S.Track.Artist>
-        </div>
-      </S.Track.Wrapper>
+      {current_track ? (
+        <S.Track.Wrapper>
+          <Image src={current_track.album.images[0].url} alt="album" width={64} height={64} />
+          <div>
+            <S.Track.Name>{current_track.name}</S.Track.Name>
+            <S.Track.Artist>{current_track.artists[0].name}</S.Track.Artist>
+          </div>
+        </S.Track.Wrapper>
+      ) : (
+        <S.Track.Wrapper>
+          <div
+            css={css`
+              width: 64px;
+              height: 64px;
+              background-color: #333;
+            `}
+          ></div>
+          <div></div>
+        </S.Track.Wrapper>
+      )}
       <S.Controls>
         <S.Playback>
           <Image
@@ -108,7 +114,7 @@ const Player = () => {
             width={36}
             height={36}
             onClick={() => {
-              player.previousTrack();
+              player?.previousTrack();
               setPosition(0);
             }}
           />
@@ -117,7 +123,7 @@ const Player = () => {
             alt={is_paused ? 'play' : 'pause'}
             width={36}
             height={36}
-            onClick={() => player.togglePlay()}
+            onClick={() => player?.togglePlay()}
           />
           <Image
             src="/images/next_song_arrow.svg"
@@ -125,18 +131,31 @@ const Player = () => {
             width={36}
             height={36}
             onClick={() => {
-              player.nextTrack();
+              player?.nextTrack();
               setPosition(0);
             }}
           />
         </S.Playback>
         <ProgressBar
+          is_paused={is_paused}
           position={position}
+          setPosition={setPosition}
           duration={duration}
-          onSeek={(position) => player.seek(position)}
+          onSeek={(position) => {
+            player?.seek(position);
+            setPosition(position);
+          }}
         />
       </S.Controls>
-      <S.Options></S.Options>
+      <S.Options>
+        <VolumeBar
+          volume={volume}
+          onSeek={() => {
+            player?.setVolume(volume);
+            setVolume(volume);
+          }}
+        />
+      </S.Options>
     </S.Container>
   );
 };
@@ -190,6 +209,10 @@ const S = {
     }
   `,
   Options: styled.div`
+    display: flex;
+    gap: 10px;
+    justify-content: end;
+    align-items: center;
     width: 30%;
   `,
 };

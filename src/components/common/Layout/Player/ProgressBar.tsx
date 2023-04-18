@@ -1,18 +1,35 @@
 import styled from '@emotion/styled';
+import { useEffect, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { Seekbar } from 'react-seekbar';
 import msToTime from 'utils/msToTime';
 
 interface ProgressBarProps {
+  is_paused: boolean;
   position: number;
+  setPosition: Dispatch<SetStateAction<number>>;
   duration: number;
   onSeek: (position: number) => void;
 }
 
-const ProgressBar = ({ position, duration, onSeek }: ProgressBarProps) => {
+const ProgressBar = ({ is_paused, position, setPosition, duration, onSeek }: ProgressBarProps) => {
+  const [pos, setPos] = useState(position);
+
+  useEffect(() => {
+    if (is_paused) {
+      return;
+    }
+    const interval = setInterval(() => {
+      setPos((prev) => prev + 400);
+    }, 400);
+
+    return () => clearInterval(interval);
+  }, [is_paused, setPosition]);
+
   return (
     <S.Container>
-      <S.TimeText>{msToTime(position)}</S.TimeText>
-      <Seekbar height={5} position={position} duration={duration} onSeek={onSeek} fullWidth />
+      <S.TimeText>{msToTime(pos)}</S.TimeText>
+      <Seekbar height={5} position={pos} duration={duration} onSeek={onSeek} fullWidth />
       <S.TimeText>{msToTime(duration)}</S.TimeText>
     </S.Container>
   );
