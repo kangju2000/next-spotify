@@ -1,19 +1,18 @@
 import styled from '@emotion/styled';
-import { Progress } from '@mantine/core';
+import { Seekbar } from 'react-seekbar';
 import msToTime from 'utils/msToTime';
 
 interface ProgressBarProps {
   position: number;
   duration: number;
+  onSeek: (position: number) => void;
 }
 
-const ProgressBar = ({ position, duration }: ProgressBarProps) => {
-  const progressValue = (position / duration) * 100;
-
+const ProgressBar = ({ position, duration, onSeek }: ProgressBarProps) => {
   return (
     <S.Container>
       <S.TimeText>{msToTime(position)}</S.TimeText>
-      <Progress size="sm" value={progressValue} color="white" bg="#a1a1a1" />
+      <Seekbar height={5} position={position} duration={duration} onSeek={onSeek} fullWidth />
       <S.TimeText>{msToTime(duration)}</S.TimeText>
     </S.Container>
   );
@@ -25,9 +24,6 @@ const S = {
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    div {
-      width: 100%;
-    }
   `,
   TimeText: styled.p`
     margin: 0 10px;

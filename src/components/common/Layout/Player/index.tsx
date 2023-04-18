@@ -73,7 +73,7 @@ const Player = () => {
         }
       });
     };
-  }, []);
+  }, [loginData]);
 
   useEffect(() => {
     if (is_paused) {
@@ -130,7 +130,11 @@ const Player = () => {
             }}
           />
         </S.Playback>
-        <ProgressBar position={position} duration={duration} />
+        <ProgressBar
+          position={position}
+          duration={duration}
+          onSeek={(position) => player.seek(position)}
+        />
       </S.Controls>
       <S.Options></S.Options>
     </S.Container>
