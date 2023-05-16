@@ -4,6 +4,7 @@ import { getSearch } from 'api/search';
 export const useGetSearchAll = (q: string) =>
   useQuery(['search', q], () => getSearch({ q, type: 'album,artist,playlist,track' }), {
     enabled: !!q,
+    suspense: true,
   });
 
 export const useGetSearchAlbums = (q: string) =>

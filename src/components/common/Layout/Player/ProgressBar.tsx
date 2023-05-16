@@ -19,12 +19,13 @@ const ProgressBar = ({ is_paused, position, setPosition, duration, onSeek }: Pro
     if (is_paused) {
       return;
     }
+    setPos(position);
     const interval = setInterval(() => {
       setPos((prev) => prev + 400);
     }, 400);
 
     return () => clearInterval(interval);
-  }, [is_paused, setPosition]);
+  }, [is_paused, position, setPosition]);
 
   return (
     <S.Container>

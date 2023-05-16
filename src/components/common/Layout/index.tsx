@@ -22,7 +22,7 @@ const Layout = ({ children }: LayoutProps) => {
         <Header />
         <S.Wrapper>
           {searchQuery ? (
-            <Suspense fallback={null}>
+            <Suspense fallback={<div>로딩중</div>}>
               <SearchPage />
             </Suspense>
           ) : (

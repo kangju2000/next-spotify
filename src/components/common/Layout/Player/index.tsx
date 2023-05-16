@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import { getCookie } from 'cookies-next';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import api from 'api/api';
 import { loginDataState } from 'recoil/atoms';
-import { getToken } from 'utils/TokenManager';
 import ProgressBar from './ProgressBar';
 import VolumeBar from './VolumeBar';
 
@@ -30,7 +30,7 @@ const Player = () => {
       const player = new window.Spotify.Player({
         name: 'player',
         getOAuthToken: (cb) => {
-          cb(getToken());
+          cb(getCookie('access_token') as string);
         },
         volume: 0.5,
       });
@@ -58,7 +58,7 @@ const Player = () => {
         if (!state) {
           return;
         }
-
+        console.log(state);
         setTrack(state.track_window.current_track);
         setPaused(state.paused);
         setPosition(state.position);
